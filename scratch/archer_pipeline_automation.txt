@@ -1,0 +1,6 @@
+## watched folder 
+/var/www/analysis/watched/Lee.Szkotnicki@cgix.com/HCP_FASTQ_queue
+root@10.10.11.23
+
+## copy FASTQ 
+root@10.10.11.23:/var/www/analysis/watched/Lee.Szkotnicki@cgix.com/HCP_FASTQ_queue

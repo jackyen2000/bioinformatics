@@ -1,0 +1,178 @@
+
+
+
+
+## 1. use cufflink to generate each individual transcripts.gft and change the prefix of the transcript 
+cufflinks -p 20 --library-type fr-firststrand -o /media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/cufflink_result/fulvestrant/G12M119_S8 -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/STAR_Align/G12M119_S8Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "G12M119_S8_$f"; done
+
+
+
+# controls
+cufflinks -p 20 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "G1-M30_CS399735$f"; done
+cufflinks -p 20 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS399736-43207380/G1-M32_S1Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "G1-M32_CS399736$f"; done
+cufflinks -p 20 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS399737-43215266/G1-M34_S1Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "G1-M34_CS399737$f"; done
+cufflinks -p 20 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS399738-43211372/G1-M35_S4Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "G1-M35_CS399738$f"; done
+cufflinks -p 20 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS399739-43216205/G1-M36_S5Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "G1-M36_CS399739$f"; done
+cufflinks -p 20 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS399740-43206369/G1-M39_S6Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "G1-M39_CS399740$f"; done
+cufflinks -p 20 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS399741-43209378/G1-M40_S7Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "G1-M40_CS399741$f"; done
+cufflinks -p 20 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS399742-43205380/G1-M42_S8Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "G1-M42_CS399742$f"; done
+cufflinks -p 20 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "G1-M30_CS399735$f"; done
+
+
+## 2. cuffmerge the gft from group 1 
+
+cuffmerge -p 20 -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf -s /media/fs02/reference/hg19/hg19.fasta assemblies.txt
+
+
+
+
+##    cuffmerge the gft from group 2 
+
+cuffmerge -p 20 -s /media/fs02/reference/hg19/hg19.fasta assemblies.txt
+
+## cuffmerge control
+cuffmerge -p 20 -s /media/fs02/reference/hg19/hg19.fasta assemblies.txt
+
+
+## 3. use group1.merged.gtf group2.merged.gft + annotated gene.gft = cuffmerge to get a group1.group2.merged.gtf
+
+cuffmerge -p 20 -g /media/fs02/reference/hg19/annotation/genes.gtf assemblies.txt
+
+/media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control/merged_asm/merged.gtf
+/media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/cufflink_result/fulvestrant/merged_asm/merged.gtf
+
+cuffmerge -p 20 -g /media/fs02/reference/hg19/annotation/genes.gtf assemblies.txt
+
+
+
+
+## 4. cuffdiff group1.group2.merged.gtf + control.1.bam, contro.2.bam, treatment.1.bam, treatement.2.bam = gene.diff
+
+group1: control 
+group2:fulstrant
+normalization:upper-quartile-norm
+
+cuffdiff -p10 --library-type fr-firststrand --upper-quartile-norm \
+--max-bundle-frags 500000 \
+-o /home/lee/workspace/RNA_seq_validation -b /media/fs02/reference/hg19/hg19.fasta --labels G1-M30_CS399735,G1-M32_CS399736,G1-M34_CS399737,G1-M35_CS399738,G1-M36_CS399739,G1-M39_CS399740,G1-M40_CS399741,G1-M42_CS399742,G12M8_S1,G12M17_S2,G12M22_S3,G12M23_S4,G12M101_S5,G12M104_S6,G12M106_S7,G12M119_S8 \
+-u /home/lee/workspace/RNA_seq_validation/control_fulstrant/merged.gtf \
+/media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/22916018-35349338/CS399736-43207380/G1-M32_S1Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/22916018-35349338/CS399737-43215266/G1-M34_S1Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/22916018-35349338/CS399738-43211372/G1-M35_S4Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/22916018-35349338/CS399739-43216205/G1-M36_S5Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/22916018-35349338/CS399740-43206369/G1-M39_S6Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/22916018-35349338/CS399741-43209378/G1-M40_S7Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/22916018-35349338/CS399742-43205380/G1-M42_S8Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/STAR_Align/G12M8_S1Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/STAR_Align/G12M17_S2Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/STAR_Align/G12M22_S3Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/STAR_Align/G12M23_S4Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/STAR_Align/G12M101_S5Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/STAR_Align/G12M104_S6Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/STAR_Align/G12M106_S7Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/STAR_Align/G12M119_S8Aligned.sortedByCoord.out.bam
+
+
+group1:control
+group2:tamoxifin
+
+
+
+cuffdiff --library-type fr-firststrand \
+		 --o diff_out /media/fs02/reference/hg19/hg19.fasta \
+		 --labels tamoxifin,fulvestrant\
+		 --u /media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/cufflink_result/tamoxifin_fulvestrant/merged_asm/merged.gtf \
+		G11M3_S9Aligned.sortedByCoord.out.bam,
+		G11M25Aligned.sortedByCoord.out.bam,
+		G11M15_STAR_Aligned.sortedByCoord.out.bam,
+		G11M24_S11Aligned.sortedByCoord.out.bam,
+		G11M70_S13Aligned.sortedByCoord.out.bam,
+		G11M80_S14Aligned.sortedByCoord.out.bam,
+		G11M83_S15Aligned.sortedByCoord.out.bam,
+		G11M89_S16Aligned.sortedByCoord.out.bam \
+		G12M8_S1Aligned.sortedByCoord.out.bam,
+		G12M17_S2Aligned.sortedByCoord.out.bam,
+		G12M22_S3Aligned.sortedByCoord.out.bam,
+		G12M23_S4Aligned.sortedByCoord.out.bam,
+		G12M101_S5Aligned.sortedByCoord.out.bam,
+		G12M104_S6Aligned.sortedByCoord.out.bam,
+		G12M106_S7Aligned.sortedByCoord.out.bam,
+		G12M119_S8Aligned.sortedByCoord.out.bam
+		
+
+
+
+
+
+
+################################
+######5/17/17
+## 1. cufflink
+## controls 
+cufflinks -p 30 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS398693-43239984/CS398693-43239984Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "CS398693-43239984$f"; done
+cufflinks -p 30 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS398695-43245840/CS398695-43245840Aligned.sortedByCoord.out.bam; for f in * ; do cp -- "$f" "/processed/CS398695-43245840$f"; done
+cufflinks -p 30 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS398694-43245838/CS398694-43245838Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "CS398694-43245838$f"; done
+
+## 100mg
+cufflinks -p 30 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/100mgkg -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS398739-43251386/CS398739-43251386Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "CS398739-43251386$f"; done
+cufflinks -p 30 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/100mgkg/CS398740-43237932 -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS398740-43237932/CS398740-43237932Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "CS398740-43237932$f"; done
+cufflinks -p 30 --library-type fr-firststrand -o /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/100mgkg/CS398741-43248382 -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/22916018-35349338/CS398741-43248382/CS398741-43248382Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "CS398741-43248382$f"; do scp *transcripts.gtf ../; done
+
+
+for f in * ; do mv "$f" "CS398741-43248382$f"; done
+for f in *
+
+## 2. cuffmerge of the controls -- need to execute in the output folder
+echo CS398739-43251386transcripts.gtf >> assemblies.txt
+echo CS398739-43251386transcripts.gtf >> assemblies.txt
+echo CS398741-43248382transcripts.gtf >> assemblies.txt 
+
+cuffmerge -p 20 -g /media/fs02/reference/hg19/annotation/hg19_genes.gtf -s /media/fs02/reference/hg19/hg19.fasta assemblies.txt
+	
+
+## 3. cuffmerge the two groups -- need to execute in the workspace folder
+echo /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control/merged_asm/merged.gtf >> assemblies.txt
+echo /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/100mgkg/merged_asm/merged.gtf >> assemblies.txt
+
+cuffmerge -p 20 -g /media/fs02/reference/hg19/annotation/hg19_genes.gtf assemblies.txt
+
+
+
+
+
+
+#### control 
+CS398694
+CS398693
+CS398695
+
+100mg
+
+CS398741
+CS398740
+CS398739
+
+
+
+
+
+
+
+
+
+
+cufflinkcs -p 8 --library-type fr-unstranded -o cufflinks_out_gft -G /home/lee/
+
+./cufflinks -p 8 --library-type fr-unstranded -o cufflinks_out_gtf -G /home/refgene.gtf /home/tophat-/accepted_hits.bam
+
+
+% cufflinks --overlap-radius 1 --library-type fr-firststrand -o cufflinks.Sp_log.dir tophat.Sp_log.dir/Sp_log.bam
+
+
+% mv cufflinks.Sp_log.dir/transcripts.gtf cufflinks.Sp_log.dir/Sp_log.transcripts.gtf
+
+./cuffmerge -o all_samples_merged -s /home/ucsc.hg19.fasta assemblies.txt -g /home/refgene.gtf -p 8 assemblies.txt
+
+
+

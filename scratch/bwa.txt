@@ -1,0 +1,37 @@
+rsync --partial -ahv --no-links --progress --include '*/' --include '*fastq.gz' --exclude '*' HCP_data/ lee@10.10.11.127:/media/fs02/Rutherford_data/HCP_data
+
+
+##FASTQ to SAM
+
+bwa mem -t 20 /media/fs02/reference/hg19/hg19.fasta HCP-CL01-JurkatA_S1_R1_001.fastq.gz HCP-CL01-JurkatA_S1_R2_001.fastq.gz > HCP-CL01-JurkatA_S1.sam
+
+
+## SAM to BAM
+samtools view -S -b HCP-CL01-JurkatA_S1.sam > HCP-CL01-JurkatA_S1.bam
+
+## sort bam
+samtools sort HCP-CL01-JurkatA_S1.bam -o HCP-CL01-JurkatA_S1.sorted.bam
+
+
+## pipeline
+
+
+bwa mem -t 20 -v 3 /media/fs02/reference/hg19/hg19.fasta HCP-CL01-RM16-39MHPC_S6_R1_001.fastq.gz HCP-CL01-RM16-39MHPC_S6_R2_001.fastq.gz | samtools view  -S -b | samtools sort -o HCP-CL01-RM16-39MHPC_S6_sorted.bam
+bwa mem -t 20 -v 3 /media/fs02/reference/hg19/hg19.fasta HCP-CL01-RM16-40LMR_S7_R1_001.fastq.gz HCP-CL01-RM16-40LMR_S7_R2_001.fastq.gz | samtools view  -S -b | samtools sort -o HCP-CL01-RM16-40LMR_S7_sorted.bam
+bwa mem -t 20 -v 3 /media/fs02/reference/hg19/hg19.fasta HCP-CL01-RM16-41OFP_S8_R1_001.fastq.gz HCP-CL01-RM16-41OFP_S8_R2_001.fastq.gz | samtools view  -S -b | samtools sort -o HCP-CL01-RM16-41OFP_S8_sorted.bam
+bwa mem -t 20 -v 3 /media/fs02/reference/hg19/hg19.fasta HCP-CL02-RM16-42MIAM_S9_R1_001.fastq.gz HCP-CL02-RM16-42MIAM_S9_R2_001.fastq.gz | samtools view  -S -b | samtools sort -o HCP-CL02-RM16-42MIAM_S9_sorted.bam
+bwa mem -t 20 -v 3 /media/fs02/reference/hg19/hg19.fasta HCP-CL02-RM16-43MSL_S10_R1_001.fastq.gz HCP-CL02-RM16-43MSL_S10_R2_001.fastq.gz | samtools view  -S -b | samtools sort -o HCP-CL02-RM16-43MSL_S10_sorted.bam
+bwa mem -t 20 -v 3 /media/fs02/reference/hg19/hg19.fasta HCP-CL02-RM16-44RLGC_S11_R1_001.fastq.gz HCP-CL02-RM16-44RLGC_S11_R2_001.fastq.gz | samtools view  -S -b | samtools sort -o HCP-CL02-RM16-44RLGC_S11_sorted.bam
+bwa mem -t 20 -v 3 /media/fs02/reference/hg19/hg19.fasta HCP-CL02-RM16-45MJS_S12_R1_001.fastq.gz HCP-CL02-RM16-45MJS_S12_R2_001.fastq.gz | samtools view  -S -b | samtools sort -o HCP-CL02-RM16-45MJS_S12_sorted.bam
+bwa mem -t 20 -v 3 /media/fs02/reference/hg19/hg19.fasta HCP-CL02-RM16-46JCC_S13_R1_001.fastq.gz HCP-CL02-RM16-46JCC_S13_R2_001.fastq.gz | samtools view  -S -b | samtools sort -o HCP-CL02-RM16-45MJS_S12_sorted.bam
+bwa mem -t 20 -v 3 /media/fs02/reference/hg19/hg19.fasta HCP-CL02-RM16-47VECB_S14_R1_001.fastq.gz HCP-CL02-RM16-47VECB_S14_R2_001.fastq.gz | samtools view  -S -b | samtools sort -o HCP-CL02-RM16-47VECB_S14_sorted.bam
+bwa mem -t 20 -v 3 /media/fs02/reference/hg19/hg19.fasta HCP-CL02-RM16-48YSA_S15_R1_001.fastq.gz HCP-CL02-RM16-48YSA_S15_R2_001.fastq.gz | samtools view  -S -b | samtools sort -o HCP-CL02-RM16-48YSA_S15_sorted.bam
+bwa mem -t 20 -v 3 /media/fs02/reference/hg19/hg19.fasta HCP-CL02-RM16-49JUGC_S16_R1_001.fastq.gz HCP-CL02-RM16-49JUGC_S16_R2_001.fastq.gz | samtools view  -S -b | samtools sort -o HCP-CL02-RM16-49JUGC_S16_sorted.bam
+
+
+
+
+
+##intersect 
+
+intersectBed -abam HCP-CL01-JurkatA_S1.sorted.bam -b /home/lee/workspace/gene_extraction/gene_list_refseq_bed -bed -wo > HCP-CL01-JurkatA_S1.txt

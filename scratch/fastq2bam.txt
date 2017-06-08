@@ -1,0 +1,32 @@
+#run1
+nohup bcl2fastq --runfolder-dir /media/fs02/NextSeq2017/170427_NB501920_0015_AHJLNNAFXX -p 12 \
+--output-dir . \
+--sample-sheet /home/lee/workspace/bcl2fastq/samplesheet/SampleSheet_RUN1.csv --no-lane-splitting 
+
+
+
+#run2
+nohup bcl2fastq --runfolder-dir /media/fs02/NextSeq2017/170501_NB501920_0016_AHJJ7TAFXX -p 12 \
+--output-dir . \
+--sample-sheet /home/lee/workspace/bcl2fastq/samplesheet/SampleSheet_RUN2.csv --no-lane-splitting 
+
+
+#run3 sequencing run done on 5/4 morning 
+nohup bcl2fastq --runfolder-dir /media/fs02/NextSeq2017/170503_NB501920_0017_AHLNV5AFXX -p 12 \
+--output-dir . \
+--sample-sheet /home/lee/workspace/bcl2fastq/samplesheet/SampleSheet_RUN3.csv --no-lane-splitting 
+
+
+
+#run3 sequencing run done on 5/10 afternoon
+nohup bcl2fastq --runfolder-dir /media/fs02/NextSeq2017/170509_NB501920_0018_AHLNKKAFXX -p 12 \
+--output-dir . \
+--sample-sheet /home/lee/workspace/bcl2fastq/samplesheet/SampleSheet_RUN4.csv --no-lane-splitting 
+
+
+
+
+
+
+bcl2fastq --runfolder-dir Data/Intensities/BaseCalls --output-dir . --sample-sheet SampleSheet.csv --no-lane-splitting
+bcl2fastq --runfolder-dir Data/Intensities/BaseCalls --output-dir . --sample-sheet /home/lee/workspace/bcl2fastq/samplesheet/22917004_sample_sheet.csv --no-lane-splitting

@@ -1,0 +1,110 @@
+## star aligner
+## make genome index
+
+STAR --runThreadN 6 \
+     --runMode genomeGenerate \
+     --genomeDir  /media/fs02/reference/hg19/starindex \
+     --genomeFastaFiles /media/fs02/reference/hg19/hg19.fasta \
+     --sjdbGTFfile /media/fs02/reference/hg19/annotation/genes.gtf \
+     --sjdbOverhang 89
+     
+     
+# alignment paried-end data:
+
+## we have strand-specific data
+STAR --runThreadN 8 \
+     --genomeDir /media/fs02/reference/hg19/starindex \
+     --readFilesIn <(zcat /media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L001_R1_001.fastq.gz) <(zcat /media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L001_R2_001.fastq.gz) \
+     --limitBAMsortRAM 12000000000 \
+     --outFileNamePrefix G1-M30_S1_L004 \
+     --genomeLoad LoadAndKeep \
+     --outSAMtype BAM   SortedByCoordinate \
+     --outSAMattributes NH   NM   MD \
+	 --outSAMunmapped Within \
+	 --outSAMmapqUnique 50 \
+	 --outSAMattrRGline ID:1   SM:CS399882 \
+	 --outSJfilterCountUniqueMin -1   2   2   2 \
+	 --outSJfilterCountTotalMin -1   2   2   2 \
+	 --outFilterType BySJout \
+	 --outFilterIntronMotifs RemoveNoncanonical \
+	 --sjdbGTFfile /media/fs02/reference/hg19/annotation/genes.gtf \
+	 --twopassMode Basic
+
+## no load memory
+STAR --runThreadN 8 \
+     --genomeDir /media/fs02/reference/hg19/starindex \
+     --readFilesIn /media/fs02/NextSeq2017/22916018-35349338/CS399736-43207380/G1-M32_S1_L001_R1_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399736-43207380/G1-M32_S1_L002_R1_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399736-43207380/G1-M32_S1_L003_R1_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399736-43207380/G1-M32_S1_L004_R1_001.fastq.gz /media/fs02/NextSeq2017/22916018-35349338/CS399736-43207380/G1-M32_S1_L001_R2_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399736-43207380/G1-M32_S1_L002_R2_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399736-43207380/G1-M32_S1_L003_R2_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399736-43207380/G1-M32_S1_L004_R2_001.fastq.gz \
+     --readFilesCommand zcat \
+     --limitBAMsortRAM 100000000000 \
+     --outFileNamePrefix G1-M32_S1 \
+     --genomeLoad LoadAndKeep \
+     --outSAMtype BAM SortedByCoordinate \
+	 --outSAMunmapped Within \
+	 --outSAMmapqUnique 50 \
+	 --outSAMattrRGline ID:1   SM:CS399882
+
+
+
+## using merge FASTQ
+STAR --runThreadN 8 \
+     --genomeDir /media/fs02/reference/hg19/starindex \
+     --readFilesIn /media/fs02/NextSeq2017/22916018-35349338/CS399736-43207380/G1-M30_S1_R1_001.fastq.gz \
+     --limitBAMsortRAM 100000000000 \
+     --outFileNamePrefix G1-M32_S1 \
+     --genomeLoad LoadAndKeep \
+     --outSAMtype BAM SortedByCoordinate \
+	 --outSAMunmapped Within \
+	 --outSAMmapqUnique 50 \
+	 --outSAMattrRGline ID:1   SM:CS399882
+
+
+ --readFilesIn <(zcat read1.fq.gz) <(zcat read2.fq.gz) 
+     
+     
+## multi lane sample first need to merge fastq from same strand     
+cat *R1_001.fastq.gz > G1-M30_S1_R1_001.fastq.gz     
+cat *R2_001.fastq.gz > G1-M30_S1_R2_001.fastq.gz     
+     
+     
+##### Final effective command line: -- from BaseSpace
+/opt/illumina/Isis/2.6.25.18/Workflows/WholeGenomeRnaSeqWorker/IsisRNA_Tools/bin/STAR   
+	--runThreadN 8   
+	--genomeDir /genomes/Homo_sapiens_maskedPAR/UCSC/hg19/Sequence/STARindex2   
+	--readFilesIn /data/scratch/workspace/RunFolder/Analysis/samples/CS399882/replicates/CS399882/filtered/CS399882_S1_L001_R1_001.fastq.gz   /data/scratch/workspace/RunFolder/Analysis/samples/CS399882/replicates/CS399882/filtered/CS399882_S1_L001_R2_001.fastq.gz      
+	--readFilesCommand zcat      
+	--limitBAMsortRAM 12000000000   
+	--outFileNamePrefix /data/scratch/workspace/RunFolder/Analysis/samples/CS399882/replicates/CS399882/STAR_Align/   
+	--outSAMtype BAM   SortedByCoordinate      
+	--outSAMattributes NH   NM   MD      
+	--outSAMunmapped Within   
+	--outSAMmapqUnique 50   
+	--outSAMattrRGline ID:1   SM:CS399882      
+	--outSJfilterCountUniqueMin -1   2   2   2      
+	--outSJfilterCountTotalMin -1   2   2   2      
+	--outFilterType BySJout   
+	--outFilterIntronMotifs RemoveNoncanonical   
+	--sjdbGTFfile /genomes/Homo_sapiens_maskedPAR/UCSC/hg19/Annotation/Archives/archive-2015-07-17-14-32-32/Genes/genes.gtf   
+	--twopassMode Basic     
+	
+## 	
+for f in `cat files`; do STAR --genomeDir /media/fs02/reference/hg19/starindex \
+--runThreadN 8 \
+--readFilesIn <(zcat /media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/$G12M106_S7_R1_001.fastq.gz) < (zcat /media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/$f\_R2_001.fastq.gz)
+--readFilesCommand zcat \
+--limitBAMsortRAM 12000000000 \
+--genomeLoad LoadAndKeep \
+--outSAMtype BAM   SortedByCoordinate \
+--outSAMattributes All \
+--outSAMunmapped Within \
+--outSAMmapqUnique 50 \
+--outSAMattrRGline ID:1   SM:CS399882 \
+--outSJfilterCountUniqueMin -1   2   2   2 \  
+--outSJfilterCountTotalMin -1   2   2   2 \
+--outFilterType BySJout \
+--outFilterIntronMotifs RemoveNoncanonical \
+--sjdbGTFfile /media/fs02/reference/hg19/annotation/genes.gtf \
+--twopassMode Basic \        
+--outFileNamePrefix $f.; done
+	
+	
+STAR --runThreadN 8      --genomeDir /media/fs02/reference/hg19/starindex  --readFilesIn /media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L001_R1_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L002_R1_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L003_R1_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L004_R1_001.fastq.gz /media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L001_R2_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L002_R2_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L003_R2_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L004_R2_001.fastq.gz      --readFilesCommand zcat           --outFileNamePrefix G1-M30            --outSAMtype BAM SortedByCoordinate  --outSAMunmapped Within  --outSAMmapqUnique 50  --outSAMattrRGline ID:1   SM:CS399882

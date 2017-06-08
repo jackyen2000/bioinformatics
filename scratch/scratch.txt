@@ -1,0 +1,81 @@
+clientKey, clientSecret, apiServer, version, appSessionId, AccessToken, userAgent, timeout, verbose, profile)
+
+
+
+for singleProject in myProjects:
+    print "# " + str(singleProject)
+    appResults = singleProject.getAppResults(myAPI)
+    print "    The App results for project " + str(singleProject) + " are \n\t" + str(appResults)
+    samples = singleProject.getSamples(myAPI)
+    print "    The samples for project " + str(singleProject) + " are \n\t" + str(samples)
+    
+    
+    
+mount -t smbfs //jyen:qazwsx0305!!@cginc-fs02/lab%20data /Volumes/lab_data/   
+    
+export PATH=$PATH:/home/lee/NGS/STAR-2.5.2b
+[ODBC Driver 13 for SQL Server]
+Description=Microsoft ODBC Driver 13 for SQL Server
+Driver=/opt/microsoft/msodbcsql/lib64/libmsodbcsql-13.1.so.7.0
+UsageCount=2    
+    
+    
+    
+    
+COUNTIF(B3:C3,61640379),"Yes","No")    
+
+rsync -rv --progress --relative --append-verify --include '*/' --include '*fastq.gz' --exclude '*' HCP_data/ lee@10.10.11.127:/media/fs02/Rutherford_data/
+rsync --partial -azvv --include '*/' --include '*fastq.gz' --exclude '*' HCP_data/ lee@10.10.11.127:/media/fs02/Rutherford_data/
+
+bjam --prefix=/home/lee/NGS/boost_1_63_0 --toolset=gcc architecture=x86 address_model=64 link=static runtime-link=static stage install
+
+
+bjam --prefix=/home/lee/ --toolset=gcc architecture=x86 address_model=32 link=static runtime-link=static stage install
+
+
+sudo mkdir -p /opt/samtools-1.4/bin /opt/samtools-1.4/include/bam /opt/samtools-1.4/lib
+
+
+
+
+./configure --prefix=/usr/bin --with-boost=/opt/boost_1_63_0 --with-bam=/usr/local/bin
+
+
+
+./configure --prefix=/home/lee/NGS/cufflinks --with-boost=/opt/boost_1_63_0 --with-bam=/usr/bin
+
+
+
+export BAM_ROOT=/home/lee/NGS/samtools-1.4
+$ make 
+$ sudo make install
+
+make prefix=/where/to/install install
+
+make prefix=/usr/bin install
+
+
+# mount drive
+mkdir /media/fs02/Rutherford
+mount -t smbfs //jyen:Genetics66!@192.168.1.5/Rutherford /media/fs02/Rutherford
+
+sudo mount -t cifs //192.168.1.5/Rutherford --verbose -o username=jyen,password=Genetics66!,sec=ntlm /media/fs02/Rutherford 
+sudo mount -t cifs -o //jyen@192.168.1.5/Rutherford /media/fs02/Rutherford
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         33000000000
+STAR --runThreadN 8      --genomeDir /media/fs02/reference/hg19/starindex  --readFilesIn /media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L001_R1_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L002_R1_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L003_R1_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L004_R1_001.fastq.gz /media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L001_R2_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L002_R2_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L003_R2_001.fastq.gz,/media/fs02/NextSeq2017/22916018-35349338/CS399735-43220220/G1-M30_S1_L004_R2_001.fastq.gz      --readFilesCommand zcat      --limitBAMsortRAM 70000000000      --outFileNamePrefix G1-M30            --outSAMtype BAM SortedByCoordinate  --outSAMunmapped Within  --outSAMmapqUnique 50  --outSAMattrRGline ID:1   SM:CS399882
+
+
+bedtools intersect -a CS398741-43248382Aligned.sortedByCoord.out.bam -b gene_list_refseq_bed \
+    -sorted \
+    -g /media/fs02/reference/hg19/hg19.fasta
+
+
+
+
+
+
+bedtools intersect -abam CS398741-43248382Aligned.sortedByCoord.out.bam -b gene_list_refseq_bed -wa
+
