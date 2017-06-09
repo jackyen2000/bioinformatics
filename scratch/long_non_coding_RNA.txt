@@ -15,7 +15,7 @@ tophat -G ~/RNA-Seq/hg38/hg38.gtf -p4 -o . ~/RNA-Seq/hg38/hg38 ../FastQFiles/Sam
 
 cat *R1_001.fastq.gz > BrainTotalRNA_R1_S2_001.fastq.gz
 cat *R2_001.fastq.gz > BrainTotalRNA_R2_S2_001.fastq.gz
-
+change something
 
 
 ##UHRTotalRNA20131122-5902913⟫
