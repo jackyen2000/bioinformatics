@@ -13,6 +13,15 @@ tophat -G ~/RNA-Seq/hg38/hg38.gtf -p4 -o . ~/RNA-Seq/hg38/hg38 ../FastQFiles/Sam
 
 
 
+cat *R1_001.fastq.gz > BrainTotalRNA_R1_S2_001.fastq.gz
+cat *R2_001.fastq.gz > BrainTotalRNA_R2_S2_001.fastq.gz
+
+
+
+##UHRTotalRNA20131122-5902913⟫
+tophat -p 8 -G /media/fs02/reference/hg19/annotation/gencode.v19.long_noncoding_RNAs.gtf -o tophat_out /media/fs02/reference/hg19/bowtie2index/hg19 UHRTotalRNA_S4_L001_R1_001.fastq.gz,UHRTotalRNA_S4_L002_R1_001.fastq.gz,UHRTotalRNA_S4_L003_R1_001.fastq.gz,UHRTotalRNA_S4_L004_R1_001.fastq.gz UHRTotalRNA_S4_L001_R2_001.fastq.gz,UHRTotalRNA_S4_L002_R2_001.fastq.gz,UHRTotalRNA_S4_L003_R2_001.fastq.gz,UHRTotalRNA_S4_L004_R2_001.fastq.gz
+
+
 STAR --runThreadN 8 \
      --genomeDir /media/fs02/reference/hg19/starindex \
      --readFilesIn <(zcat /media/fs02/BaseSpace_public_data/NextSeq\ 500-\ RNA-Seq\ \(8plex\)-5383380/BrainTotalRNA20131118-5902911/BrainTotalRNA_S2_L001_R1_001.fastq.gz) <(zcat /media/fs02/BaseSpace_public_data/NextSeq\ 500-\ RNA-Seq\ \(8plex\)-5383380/BrainTotalRNA20131118-5902911/BrainTotalRNA_S2_L001_R2_001.fastq.gz) \
