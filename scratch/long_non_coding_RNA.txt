@@ -24,7 +24,7 @@ tophat -p 8 -G /media/fs02/reference/hg19/annotation/gencode.v19.long_noncoding_
 
 STAR --runThreadN 8 \
      --genomeDir /media/fs02/reference/hg19/starindex \
-     --readFilesIn <(zcat /media/fs02/BaseSpace_public_data/NextSeq\ 500-\ RNA-Seq\ \(8plex\)-5383380/BrainTotalRNA20131118-5902911/BrainTotalRNA_S2_L001_R1_001.fastq.gz) <(zcat /media/fs02/BaseSpace_public_data/NextSeq\ 500-\ RNA-Seq\ \(8plex\)-5383380/BrainTotalRNA20131118-5902911/BrainTotalRNA_S2_L001_R2_001.fastq.gz) \
+     --readFilesIn <(zcat /media/fs02/BaseSpace_public_data/NextSeq\ 500-\ RNA-Seq\ \(8plex\)-5383380/BrainTotalRNA20131118-5902911/BrainTotalRNA_R1_S2_001.fastq.gz) <(zcat /media/fs02/BaseSpace_public_data/NextSeq\ 500-\ RNA-Seq\ \(8plex\)-5383380/BrainTotalRNA20131118-5902911/BrainTotalRNA_R2_S2_001.fastq.gz) \
      --limitBAMsortRAM 100000000000 \
      --outFileNamePrefix CS398741-43248382 \
      --genomeLoad LoadAndKeep \
@@ -37,10 +37,13 @@ STAR --runThreadN 8 \
 
 ##cufflink ab initio mode
 cufflinks -o cufflink_output tophat_out/accepted_hits.bam
-
+cufflinks -o cufflink_output BrainTotalRNAAligned.sortedByCoord.out.bam
 
 ## sebnif
 /home/lee/NGS/sebnif-1.3rc/sebnif -o sebnif_output/ transcripts.gtf
 
+/home/lee/NGS/sebnif-1.3rc/sebnif -o sebnif_output/ transcripts.gtf
+
 scp lee@10.10.11.127:/media/fs02/BaseSpace_public_data/NextSeq\ 500-\ RNA-Seq\ (8plex)-5383380/BrainTotalRNA20131118-5902911/Rplot.png .
 
+novel_gtf$tracking_id <- gsub('.1', '', novel_gtf$tracking_id)

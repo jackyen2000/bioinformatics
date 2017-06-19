@@ -3,6 +3,15 @@ aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "<FILEN
 
 aws s3 ls --profile kristin s3://h3bioinf-share-cgi –-recursive
 
+aws s3 --recursive mv s3://<bucketname>/<folder_name_from> s3://<bucket>/<folder_name_to>
+
+
+aws s3 --profile kristin --recursive mv s3://h3bioinf-share-cgi/22917011 s3://h3bioinf-share-cgi/22917011_old 
+
+
+
+aws s3 --profile kristin rm s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/SampleSheet_22917011_Project44_Run1.xlsx
+aws s3 --profile kristin rm s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/SampleSheet_22917011_Project44_Run2.xlsx
 
 Z:\229-16-002_data\22917011_Project44_Run1
 
@@ -36,30 +45,30 @@ aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS4053
 
 Z:\229-16-002_data\22917011_Project44_Run2
 ## CSV
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405371_S1.coverage.csv" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405371_S1.coverage.csv"
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405370_S2.coverage.csv" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405370_S2.coverage.csv"
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405369_S3.coverage.csv" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405369_S3.coverage.csv"
+(aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405371_S1.coverage.csv" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405371_S1.coverage.csv";
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405370_S2.coverage.csv" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405370_S2.coverage.csv";
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405369_S3.coverage.csv" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405369_S3.coverage.csv")
 
 ## xlsx
 aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "SampleSheet_22917011_Project44_Run2.xlsx" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/SampleSheet_22917011_Project44_Run2.xlsx"
 
 ## FASTQ
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405370_S2_L001_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405370_S2_L001_R2_001.fastq.gz"
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405371_S3_L001_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405371_S3_L001_R2_001.fastq.gz"
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405370_S2_L001_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405370_S2_L001_R1_001.fastq.gz"
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405371_S3_L001_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405371_S3_L001_R1_001.fastq.gz"
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405369_S1_L001_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405369_S1_L001_R2_001.fastq.gz"
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405369_S1_L001_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405369_S1_L001_R1_001.fastq.gz"
+(aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405370_S2_L001_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405370_S2_L001_R2_001.fastq.gz";
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405371_S3_L001_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405371_S3_L001_R2_001.fastq.gz";
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405370_S2_L001_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405370_S2_L001_R1_001.fastq.gz";
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405371_S3_L001_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405371_S3_L001_R1_001.fastq.gz";
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405369_S1_L001_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405369_S1_L001_R2_001.fastq.gz";
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405369_S1_L001_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405369_S1_L001_R1_001.fastq.gz")
 
 ## VCF
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405371_S1.vcf.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405371_S1.vcf.gz"
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405370_S2.vcf.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405370_S2.vcf.gz"
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405369_S3.vcf.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405369_S3.vcf.gz"
+(aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405371_S1.vcf.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405371_S1.vcf.gz";
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405370_S2.vcf.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405370_S2.vcf.gz";
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405369_S3.vcf.gz" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405369_S3.vcf.gz")
 
 ## report
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405371_S1.report.pdf" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405371_S1.report.pdf"
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405370_S2.report.pdf" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405370_S2.report.pdf"
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405369_S3.report.pdf" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405369_S3.report.pdf"
+(aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405371_S1.report.pdf" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405371_S1.report.pdf";
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405370_S2.report.pdf" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405370_S2.report.pdf";
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405369_S3.report.pdf" "s3://h3bioinf-share-cgi/22917011/NGS/20170531_data/CS405369_S3.report.pdf")
 
 
 
@@ -74,8 +83,8 @@ aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS4053
 
 
 ## 22916004
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "NA12878_8_S8_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22916004/NGS/20170503_data/NA12878_8_S8_R2_001.fastq.gz"
-aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "NA12878_8_S8_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22916004/NGS/20170503_data/NA12878_8_S8_R1_001.fastq.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "NA12878_8_S8_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/NA12878_8_S8_R2_001.fastq.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "NA12878_8_S8_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/NA12878_8_S8_R1_001.fastq.gz"
 
 aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "NA12878_7_S7_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22916004/NGS/20170503_data/NA12878_7_S7_R2_001.fastq.gz"
 aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "NA12878_7_S7_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22916004/NGS/20170503_data/NA12878_7_S7_R1_001.fastq.gz"
@@ -104,5 +113,94 @@ aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "Undete
 
 Z:\229-16-002_data\22917011_Project44_Run1
 Z:\229-16-002_data\22917011_Project44_Run2
+
+
+
+
+## 6/2
+
+aws s3 ls --profile kristin s3://h3bioinf-share-cgi –-recursive
+
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "JXP01Jun17-02.eds" "s3://h3bioinf-share-cgi/22916002/24-gene TLDA/20170602_data/JXP01Jun17-02.eds"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "JXP01Jun17-01.eds" "s3://h3bioinf-share-cgi/22916002/24-gene TLDA/20170602_data/JXP01Jun17-01.eds"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "JXP31May17-03.eds" "s3://h3bioinf-share-cgi/22916002/24-gene TLDA/20170602_data/JXP31May17-03.eds"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "JXP31May17-02.eds" "s3://h3bioinf-share-cgi/22916002/24-gene TLDA/20170602_data/JXP31May17-02.eds"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "JXP31May17-01.eds" "s3://h3bioinf-share-cgi/22916002/24-gene TLDA/20170602_data/JXP31May17-01.eds"
+
+##xls
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "JXP01Jun17-02  22916002  S-10051001.xls" "s3://h3bioinf-share-cgi/22916002/24-gene TLDA/20170602_data/JXP01Jun17-02  22916002  S-10051001.xls"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "JXP01Jun17-01  22916002  S-10051001.xls" "s3://h3bioinf-share-cgi/22916002/24-gene TLDA/20170602_data/JXP01Jun17-01  22916002  S-10051001.xls"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "JXP31May17-03   22916002  S-10051001.xls" "s3://h3bioinf-share-cgi/22916002/24-gene TLDA/20170602_data/JXP31May17-03   22916002  S-10051001.xls"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "JXP31May17-02  22916002  S-10051001.xls" "s3://h3bioinf-share-cgi/22916002/24-gene TLDA/20170602_data/JXP31May17-02  22916002  S-10051001.xls"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "JXP31May17-01   22916002   S-10041001.xls" "s3://h3bioinf-share-cgi/22916002/24-gene TLDA/20170602_data/JXP31May17-01   22916002   S-10041001.xls"
+
+
+
+## 6/16
+Z:\229-16-002_data\22916002_10111002_Run1
+
+## CSV
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405156_S1.coverage.csv" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405156_S1.coverage.csv"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404906_S2.coverage.csv" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404906_S2.coverage.csv"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404888_S3.coverage.csv" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404888_S3.coverage.csv"
+
+
+## xlsx
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "Sample Sheet 22916002_10111002_Run1.xlsx" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/Sample Sheet 22916002_10111002_Run1.xlsx"
+
+## FASTQ
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404888_S3_L001_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404888_S3_L001_R1_001.fastq.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404888_S3_L001_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404888_S3_L001_R2_001.fastq.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404906_S2_L001_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404906_S2_L001_R1_001.fastq.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404906_S2_L001_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404906_S2_L001_R2_001.fastq.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405156_S1_L001_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405156_S1_L001_R1_001.fastq.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405156_S1_L001_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405156_S1_L001_R2_001.fastq.gz"
+
+## VCF
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405156_S1.vcf.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405156_S1.vcf.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404906_S2.vcf.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404906_S2.vcf.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404888_S3.vcf.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404888_S3.vcf.gz"
+
+## report
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405156_S1.report.pdf" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405156_S1.report.pdf"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404906_S2.report.pdf" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404906_S2.report.pdf"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404888_S3.report.pdf" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404888_S3.report.pdf"
+
+
+
+
+
+
+
+
+Z:\229-16-002_data\22916002_10011003_Run1
+## CSV
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405160_S1.coverage.csv" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405160_S1.coverage.csv"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405150_S2.coverage.csv" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405150_S2.coverage.csv"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404910_S3.coverage.csv" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404910_S3.coverage.csv"
+
+
+## xlsx
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "Sample Sheet 22916002_10011003_Run1.xlsx" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/Sample Sheet 22916002_10011003_Run1.xlsx"
+
+## FASTQ
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404910_S2_L001_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404910_S2_L001_R1_001.fastq.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404910_S2_L001_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404910_S2_L001_R2_001.fastq.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405150_S3_L001_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405150_S3_L001_R1_001.fastq.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405150_S3_L001_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405150_S3_L001_R2_001.fastq.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405160_S1_L001_R1_001.fastq.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405160_S1_L001_R1_001.fastq.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405160_S1_L001_R2_001.fastq.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405160_S1_L001_R2_001.fastq.gz"
+
+## VCF
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405160_S1.vcf.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405160_S1.vcf.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405150_S2.vcf.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405150_S2.vcf.gz"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404910_S3.vcf.gz" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404910_S3.vcf.gz"
+
+## report
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405160_S1.report.pdf" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405160_S1.report.pdf"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS405150_S2.report.pdf" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS405150_S2.report.pdf"
+aws s3 cp --profile kristin --acl bucket-owner-full-control --sse AES256 "CS404910_S3.report.pdf" "s3://h3bioinf-share-cgi/22916002/NGS/20170616_data/CS404910_S3.report.pdf"
+
+
 
 

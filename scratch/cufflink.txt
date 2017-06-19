@@ -20,14 +20,14 @@ cufflinks -p 20 --library-type fr-firststrand -o /media/fs02/NextSeq2017/2291601
 
 
 ## 2. cuffmerge the gft from group 1 
-
+## assemblies.txt add headers here 
 cuffmerge -p 20 -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf -s /media/fs02/reference/hg19/hg19.fasta assemblies.txt
 
 
 
 
-##    cuffmerge the gft from group 2 
-
+## cuffmerge the gft from group 2 
+## assemblies.txt add headers here 
 cuffmerge -p 20 -s /media/fs02/reference/hg19/hg19.fasta assemblies.txt
 
 ## cuffmerge control
@@ -51,6 +51,8 @@ cuffmerge -p 20 -g /media/fs02/reference/hg19/annotation/genes.gtf assemblies.tx
 group1: control 
 group2:fulstrant
 normalization:upper-quartile-norm
+## labels add header(control vs treated)
+
 
 cuffdiff -p10 --library-type fr-firststrand --upper-quartile-norm \
 --max-bundle-frags 500000 \
@@ -136,6 +138,24 @@ echo /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/vehicle_control/m
 echo /media/fs02/NextSeq2017/22916018-35349338/cufflink_result/100mgkg/merged_asm/merged.gtf >> assemblies.txt
 
 cuffmerge -p 20 -g /media/fs02/reference/hg19/annotation/hg19_genes.gtf assemblies.txt
+
+
+## 4. run cuffdiff
+group1: control 
+group2: 100mgkg
+normalization:upper-quartile-norm
+
+cuffdiff -p20 --library-type fr-firststrand --upper-quartile-norm \
+-v \
+--max-bundle-frags 500000 \
+-o /home/lee/workspace/RNA_seq_validation/control_100mgkg -b /media/fs02/reference/hg19/hg19.fasta --labels CS398693-43239984,CS398694-43245838,CS398695-43245840,CS398739-43251386,CS398740-43237932,CS398741-43248382 \
+-u /home/lee/workspace/RNA_seq_validation/control_100mgkg/merged_asm/merged.gtf \
+/media/fs02/NextSeq2017/22916018-35349338/CS398693-43239984/CS398693-43239984Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/22916018-35349338/CS398694-43245838/CS398694-43245838Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/22916018-35349338/CS398695-43245840/CS398695-43245840Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/22916018-35349338/CS398739-43251386/CS398739-43251386Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/22916018-35349338/CS398740-43237932/CS398740-43237932Aligned.sortedByCoord.out.bam \
+/media/fs02/NextSeq2017/22916018-35349338/CS398741-43248382/CS398741-43248382Aligned.sortedByCoord.out.bam
 
 
 
