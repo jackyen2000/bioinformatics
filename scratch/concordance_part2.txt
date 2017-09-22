@@ -1,0 +1,18 @@
+grep -c "123738989" HG00533.mapped.ILLUMINA.bwa.CHS.exome.20120522.vcf
+
+
+grep -F -f list_snp.txt HG00533.mapped.ILLUMINA.bwa.CHS.exome.20120522.vcf
+
+## this one works
+bcftools view -i 'MIN(DP)>=20' NA18572_S6.genome.vcf > NA18572_S6.genome_dp20.vcf
+
+bcftools view -i 'POS=123738989' HG00533.mapped.ILLUMINA.bwa.CHS.exome.20120522.vcf
+
+
+bcftools view -i '%POS=123738989/n' HG00533.mapped.ILLUMINA.bwa.CHS.exome.20120522.vcf
+
+
+
+
+
+#### subset of BAM

@@ -1,0 +1,63 @@
+## Bench mark the speed to do one exome sample data analysis
+##
+##
+##
+
+
+### BCL to FASTQ
+nohup bcl2fastq --runfolder-dir /media/NGS_data/BaseSpace_exome/HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878 -p 12 \
+--output-dir . \
+--sample-sheet SampleSheet.csv --no-lane-splitting 
+
+
+
+
+## move FASTQ to individual folder
+for file in *fastq.gz; do 
+	fastqname=${file##*/}
+	basename=${fastqname%_R*_001.fastq.gz}
+	#echo 'FASTQ filename:' $filename
+	echo $basename	
+	mkdir -p $basename
+	mv $fastqname $basename
+	parallel python /media/NGS_data/workspace/py/align_bwa_v2.py -w /media/NGS_data/BaseSpace_exome/ -r HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878 -s $basename
+done
+
+
+
+#### TO DO
+newline=''
+pipeline='python /media/NGS_data/workspace/py/align_bwa_v2.py -w /media/NGS_data/BaseSpace_exome/ -r HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878 -s '
+while read -r line; do
+	#echo parallel :::
+	newline+=$line' '
+	
+echo $newline		
+#echo parallel ${pipeline} ::: $line
+#echo parallel ::: command
+done < sample_list.txt
+
+$newline
+
+
+### execute 7 exome samples
+parallel --verbose --eta --bar python /media/NGS_data/workspace/py/pipeline.py -w /media/NGS_data/BaseSpace_exome/ -r HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878 -s ::: NA12878_A005_S3 NA12878_A007_S5 NA12878_A012_S6 NA12878_A014_S8 NA12878_A002_S1 NA12878_A006_S4 NA12878_A015_S9 NA12878_A013_S7 NA12878_A004_S2
+
+
+
+### BWA Alignment
+python /media/NGS_data/workspace/py/align_bwa_v2.py -w /media/NGS_data/BaseSpace_exome/ -r HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878 -s NA12878_A015_S9
+
+### GATK
+sudo java -Xmx2g -jar /home/lee/NGS/GenomeAnalysisTK.jar \
+	-T UnifiedGenotyper \
+	-R /media/fs02/reference/hg19/human_g1k_v37.fasta \
+	-I /media/NGS_data/BaseSpace_exome/HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878/pipeline_output/NA12878_A007_S5_sorted.bam \
+	-o /media/NGS_data/BaseSpace_exome/HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878/pipeline_output/NA12878_A007_S5_sorted.vcf
+	
+	
+python /media/NGS_data/workspace/py/pipeline.py -w /media/NGS_data/BaseSpace_exome/ -r HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878 -s NA12878_A007_S5
+
+java -Xmx2g -jar /home/lee/NGS/picard.jar CollectAlignmentSummaryMetrics R=/media/fs02/reference/hg19/hg19.fasta I=NA12878_A002_S1_sorted.bam O=NA12878_A002_S1_alignment_metrics.txt
+
+

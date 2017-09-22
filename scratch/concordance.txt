@@ -1,0 +1,109 @@
+
+## STEP 1
+## bedtool intersect to get the region of interest from bed file
+bedtools intersect -a HG00533.mapped.ILLUMINA.bwa.CHS.exome.20120522.vcf -b RA_Target_no_chr.bed -header > HG00533.mapped.ILLUMINA.bwa.CHS.exome.20120522_filtered_hasheader.vcf
+bedtools intersect -a HG00419.mapped.ILLUMINA.bwa.CHS.exome.20121211.vcf -b RA_Target_no_chr.bed -header > HG00419.mapped.ILLUMINA.bwa.CHS.exome.20121211_filtered_hasheader.vcf
+bedtools intersect -a HG00608.mapped.ILLUMINA.bwa.CHS.exome.20120522.vcf -b RA_Target_no_chr.bed -header > HG00608.mapped.ILLUMINA.bwa.CHS.exome.20120522_filtered_hasheader.vcf
+
+bedtools intersect -a NA20357.mapped.ILLUMINA.bwa.ASW.exome.20130422.vcf -b RA_Target_no_chr.bed -header > NA20357.mapped.ILLUMINA.bwa.ASW.exome.20130422_filtered_hasheader.vcf
+bedtools intersect -a NA19070.mapped.ILLUMINA.bwa.JPT.exome.20120522.vcf -b RA_Target_no_chr.bed -header > NA19070.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader.vcf
+
+## need to run
+bedtools intersect -a NA18990.mapped.ILLUMINA.bwa.JPT.exome.20120522.vcf -b RA_Target_no_chr.bed -header > NA18990.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader.vcf
+
+
+bedtools intersect -a NA18976.mapped.ILLUMINA.bwa.JPT.exome.20120522.vcf -b RA_Target_no_chr.bed -header > NA18976.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader.vcf
+bedtools intersect -a NA18572.mapped.ILLUMINA.bwa.CHB.exome.20120522.vcf -b RA_Target_no_chr.bed -header > NA18572.mapped.ILLUMINA.bwa.CHB.exome.20120522_filtered_hasheader.vcf
+bedtools intersect -a NA18977.mapped.ILLUMINA.bwa.JPT.exome.20130415.vcf -b RA_Target_no_chr.bed -header > NA18977.mapped.ILLUMINA.bwa.JPT.exome.20130415_filtered_hasheader.vcf
+
+
+
+
+
+## STEP 2
+## remove DP < 20 for both vcf files
+
+
+## reference from RA
+bcftools view -i 'MIN(DP)>=20' HG00533_S2.genome.vcf > HG00533_S2.genome_dp20.vcf
+bcftools view -i 'MIN(DP)>=20' HG00608_S1.genome.vcf > HG00608_S1.genome_dp20.vcf
+bcftools view -i 'MIN(DP)>=20' HG00419_S3.genome.vcf > HG00419_S3.genome_dp20.vcf
+bcftools view -i 'MIN(DP)>=20' NA20357_S1.genome.vcf > NA20357_S1.genome_dp20.vcf
+bcftools view -i 'MIN(DP)>=20' NA18976_S5.genome.vcf > NA18976_S5.genome_dp20.vcf
+bcftools view -i 'MIN(DP)>=20' NA18977_S4.genome.vcf > NA18977_S4.genome_dp20.vcf
+bcftools view -i 'MIN(DP)>=20' NA18990_S3.genome.vcf > NA18990_S3.genome_dp20.vcf
+bcftools view -i 'MIN(DP)>=20' NA19070_S2.genome.vcf > NA19070_S2.genome_dp20.vcf
+bcftools view -i 'MIN(DP)>=20' NA18572_S6.genome.vcf > NA18572_S6.genome_dp20.vcf
+
+
+
+
+
+
+## query from 1000g
+bcftools view -i 'MIN(DP)>=20' HG00533.mapped.ILLUMINA.bwa.CHS.exome.20120522_filtered_hasheader.vcf > HG00533.mapped.ILLUMINA.bwa.CHS.exome.20120522_filtered_hasheader_dp20.vcf
+bcftools view -i 'MIN(DP)>=20' HG00608.mapped.ILLUMINA.bwa.CHS.exome.20120522_filtered_hasheader.vcf > HG00608.mapped.ILLUMINA.bwa.CHS.exome.20120522_filtered_hasheader_dp20.vcf
+
+bcftools view -i 'MIN(DP)>=20' HG00419.mapped.ILLUMINA.bwa.CHS.exome.20121211_filtered_hasheader.vcf > HG00419.mapped.ILLUMINA.bwa.CHS.exome.20121211_filtered_hasheader_dp20.vcf
+bcftools view -i 'MIN(DP)>=20' NA20357.mapped.ILLUMINA.bwa.ASW.exome.20130422_filtered_hasheader.vcf > NA20357.mapped.ILLUMINA.bwa.ASW.exome.20130422_filtered_hasheader_dp20.vcf
+bcftools view -i 'MIN(DP)>=20' NA19070.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader.vcf > NA19070.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader_dp20.vcf
+bcftools view -i 'MIN(DP)>=20' NA18976.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader.vcf > NA18976.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader_dp20.vcf
+bcftools view -i 'MIN(DP)>=20' NA18572.mapped.ILLUMINA.bwa.CHB.exome.20120522_filtered_hasheader.vcf > NA18572.mapped.ILLUMINA.bwa.CHB.exome.20120522_filtered_hasheader_dp20.vcf
+bcftools view -i 'MIN(DP)>=20' NA18977.mapped.ILLUMINA.bwa.JPT.exome.20130415_filtered_hasheader.vcf > NA18977.mapped.ILLUMINA.bwa.JPT.exome.20130415_filtered_hasheader_dp20.vcf
+
+bcftools view -i 'MIN(DP)>=20' NA18990.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader.vcf > NA18990.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader_dp20.vcf
+
+
+
+
+
+
+
+
+## STEP 3
+## veftool diff
+
+##--diff-site
+##
+##Outputs the sites that are common / unique to each file. The output file has the suffix ".diff.sites_in_files".
+
+vcftools --vcf /media/NGS_data/1000g_data/HG00533.mapped.ILLUMINA.bwa.CHS.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/HG00533_S2.genome_dp20.vcf --not-chr chr11 --not-chr chr12 --diff-site --out HG00533
+vcftools --vcf /media/NGS_data/1000g_data/HG00419.mapped.ILLUMINA.bwa.CHS.exome.20121211_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/HG00419_S3.genome_dp20.vcf --not-chr chr11 --not-chr chr12 --diff-site --out HG00419
+vcftools --vcf /media/NGS_data/1000g_data/HG00608.mapped.ILLUMINA.bwa.CHS.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/HG00608_S1.genome_dp20.vcf --not-chr chr11 --diff-site --out HG00608
+vcftools --vcf /media/NGS_data/1000g_data/NA20357.mapped.ILLUMINA.bwa.ASW.exome.20130422_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA20357_S1.genome_dp20.vcf --not-chr chr11 --diff-site --out NA20357
+vcftools --vcf /media/NGS_data/1000g_data/NA19070.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA19070_S2.genome_dp20.vcf --not-chr chr11 --diff-site --out NA19070
+vcftools --vcf /media/NGS_data/1000g_data/NA18976.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA18976_S5.genome_dp20.vcf --not-chr chr11 --diff-site --out NA18976
+vcftools --vcf /media/NGS_data/1000g_data/NA18572.mapped.ILLUMINA.bwa.CHB.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA18572_S6.genome_dp20.vcf --not-chr 11 --diff-site --out NA18572
+vcftools --vcf /media/NGS_data/1000g_data/NA18977.mapped.ILLUMINA.bwa.JPT.exome.20130415_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA18977_S4.genome_dp20.vcf --not-chr chr11 --diff-site --out NA18977
+
+vcftools --vcf /media/NGS_data/1000g_data/NA18990.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA18990_S3.genome_dp20.vcf --not-chr chr11 --diff-site --out NA18990
+
+
+##--diff-site-discordance
+##This option calculates discordance on a site by site basis. The resulting output file has the suffix ".diff.sites".
+
+vcftools --vcf /media/NGS_data/1000g_data/HG00533.mapped.ILLUMINA.bwa.CHS.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/HG00533_S2.genome_dp20.vcf --not-chr chr11 --not-chr chr12 --diff-site-discordance --out HG00533
+vcftools --vcf /media/NGS_data/1000g_data/HG00419.mapped.ILLUMINA.bwa.CHS.exome.20121211_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/HG00419_S3.genome_dp20.vcf --not-chr chr11 --not-chr chr12 --diff-site-discordance --out HG00419
+vcftools --vcf /media/NGS_data/1000g_data/HG00608.mapped.ILLUMINA.bwa.CHS.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/HG00608_S1.genome_dp20.vcf --not-chr chr11 --diff-site-discordance --out HG00608
+vcftools --vcf /media/NGS_data/1000g_data/NA20357.mapped.ILLUMINA.bwa.ASW.exome.20130422_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA20357_S1.genome_dp20.vcf --not-chr chr11 --diff-site-discordance --out NA20357
+vcftools --vcf /media/NGS_data/1000g_data/NA19070.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA19070_S2.genome_dp20.vcf --not-chr chr11 --diff-site-discordance --out NA19070
+vcftools --vcf /media/NGS_data/1000g_data/NA18976.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA18976_S5.genome_dp20.vcf --not-chr chr11 --diff-site-discordance --out NA18976
+vcftools --vcf /media/NGS_data/1000g_data/NA18572.mapped.ILLUMINA.bwa.CHB.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA18572_S6.genome_dp20.vcf --not-chr 11 --diff-site-discordance --out NA18572
+vcftools --vcf /media/NGS_data/1000g_data/NA18977.mapped.ILLUMINA.bwa.JPT.exome.20130415_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA18977_S4.genome_dp20.vcf --not-chr chr11 --diff-site-discordance --out NA18977
+
+vcftools --vcf /media/NGS_data/1000g_data/NA18990.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA18990_S3.genome_dp20.vcf --not-chr chr11 --diff-site-discordance --out NA18990
+
+##--diff-indv-discordance
+##This option calculates discordance on a per-individual basis. The resulting output file has the suffix ".diff.indv".
+
+
+vcftools --vcf /media/NGS_data/1000g_data/HG00533.mapped.ILLUMINA.bwa.CHS.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/HG00533_S2.genome_dp20.vcf --not-chr chr11 --not-chr chr12 --diff-indv-discordance --out HG00533
+vcftools --vcf /media/NGS_data/1000g_data/HG00419.mapped.ILLUMINA.bwa.CHS.exome.20121211_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/HG00419_S3.genome_dp20.vcf --not-chr chr11 --not-chr chr12 --diff-indv-discordance --out HG00419
+vcftools --vcf /media/NGS_data/1000g_data/HG00608.mapped.ILLUMINA.bwa.CHS.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/HG00608_S1.genome_dp20.vcf --not-chr chr11 --diff-indv-discordance --out HG00608
+vcftools --vcf /media/NGS_data/1000g_data/NA20357.mapped.ILLUMINA.bwa.ASW.exome.20130422_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA20357_S1.genome_dp20.vcf --not-chr chr11 --diff-indv-discordance --out NA20357
+vcftools --vcf /media/NGS_data/1000g_data/NA19070.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA19070_S2.genome_dp20.vcf --not-chr chr11 --diff-indv-discordance --out NA19070
+vcftools --vcf /media/NGS_data/1000g_data/NA18976.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA18976_S5.genome_dp20.vcf --not-chr chr11 --diff-indv-discordance --out NA18976
+vcftools --vcf /media/NGS_data/1000g_data/NA18572.mapped.ILLUMINA.bwa.CHB.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA18572_S6.genome_dp20.vcf --not-chr 11 --diff-indv-discordance --out NA18572
+vcftools --vcf /media/NGS_data/1000g_data/NA18977.mapped.ILLUMINA.bwa.JPT.exome.20130415_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA18977_S4.genome_dp20.vcf --not-chr chr11 --diff-indv-discordance --out NA18977
+vcftools --vcf /media/NGS_data/1000g_data/NA18990.mapped.ILLUMINA.bwa.JPT.exome.20120522_filtered_hasheader_dp20.vcf --diff /media/NGS_data/RA/NA18990_S3.genome_dp20.vcf --not-chr chr11 --diff-indv-discordance --out NA18990
+
