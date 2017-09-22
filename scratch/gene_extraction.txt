@@ -1,0 +1,220 @@
+bedtools intersect -a new_file.bed -b downloaded_file.bed -f 1 > results.bed
+
+bedtools intersect -a HCP-CL04-RM16-61NCAF_S12_sorted.bed -b /home/lee/workspace/gene_extraction/gene_list_chrom_start_end_gene.bed -bed | head -20HCP-CL04-RM16-61NCAF_S12_sorted.bam
+
+bedtools intersect -abam HCP-CL04-RM16-61NCAF_S12_sorted.bam -b /home/lee/workspace/gene_extraction/gene_list_chrom_start_end_gene.bed -bed -sorted -wa| head -20 
+bedtools intersect -abam HCP-CL04-RM16-61NCAF_S12_sorted.bam -b /home/lee/workspace/gene_extraction/gene_list_chrom_start_end_gene.bed -bed -sorted -wo > HCP-CL04-RM16-61NCAF_S12_sorted_results.bed
+
+bedtools intersect -abam HCP-CL04-RM16-61NCAF_S12_sorted.bam -b /home/lee/workspace/gene_extraction/gene_list_chrom_start_end_gene.bed -bed -wo 
+
+
+## test it with hg19 reference genome bed
+bedtools intersect -abam HCP-CL04-RM16-61NCAF_S12_sorted.bam -b /home/lee/workspace/gene_extraction/gene_table_refseq.bed -bed -wo | cut -f16 | sort | uniq > HCP-CL04-RM16-60CF_S11_sorted_all_reference_gene_results.bed
+
+
+bedtools intersect -a HCP-CL04-RM16-61NCAF_S12_sorted.bed -b /home/lee/workspace/gene_extraction/gene_list_chrom_start_end_gene.bed -wo > HCP-CL04-RM16-61NCAF_S12_sorted_result.bed
+
+
+
+##### 161202_NB501330_0060_AHGWH7AFXX
+bedtools intersect -abam HCP-CL07-M16-2873GG_S7_sorted.bam -b /home/lee/workspace/gene_extraction/gene_list_new_chrom_start_end_gene.bed -bed -wo | cut -f16 | sort | uniq > HCP-CL07-M16-2873GG_S7_results.bed
+
+
+
+### extract the genes from BAM
+#-wb Reporting the original B feature
+for file in *bam; do
+	filename=${file##*/}
+	basename=${filename%.*}
+	echo 'Executing bedtools intersect command on file:' $filename	
+	bedtools intersect -abam ${file##*/} -b /home/lee/workspace/gene_extraction/gene_list_new_chrom_start_end_gene.bed -bed -wb | cut -f16 | sort | uniq > ${filename%.*}_results.bed
+done
+
+
+cat HCP-CL03-RM16-54LA_S5_sorted_results.bed | wc -l 
+
+
+## call variance single 
+freebayes -f /media/fs02/reference/hg19/hg19.fasta --min-alternate-fraction 0.2 -b HCP-CL03-RM16-50EO_S1_sorted.bam -v HCP-CL03-RM16-50EO_S1_sorted.bam.freebayes.vcf
+
+
+### 161130_NB501330_0059_AHGWVLAFXX
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -dd -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL01-RM16-35CA_S2_sorted.bam > HCP-CL01-RM16-35CA_S2_sorted.bam.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -dd -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL01-JurkatA_S1.sorted.bam > HCP-CL01-JurkatA_S1.sorted.bam.freebayes.vcf
+
+
+##6/16
+
+HCP_data/161130_NB501330_0059_AHGWVLAFXX
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL02-RM16-47VECB_S14_sorted.bam > HCP-CL02-RM16-47VECB_S14_sorted.freebayes.vcf 
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL02-RM16-46JCC_S13_sorted.bam > HCP-CL02-RM16-46JCC_S13_sorted.freebayes.vcf ;
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL02-RM16-45MJS_S12_sorted.bam > HCP-CL02-RM16-45MJS_S12_sorted.freebayes.vcf ;
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL02-RM16-44RLGC_S11_sorted.bam > HCP-CL02-RM16-44RLGC_S11_sorted.freebayes.vcf ;
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL02-RM16-43MSL_S10_sorted.bam > HCP-CL02-RM16-43MSL_S10_sorted.freebayes.vcf 
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL02-RM16-42MIAM_S9_sorted.bam > HCP-CL02-RM16-42MIAM_S9_sorted.freebayes.vcf 
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL01-RM16-41OFP_S8_sorted.bam > HCP-CL01-RM16-41OFP_S8_sorted.freebayes.vcf 
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL01-RM16-40LMR_S7_sorted.bam > HCP-CL01-RM16-40LMR_S7_sorted.freebayes.vcf 
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL01-RM16-39MHPC_S6_sorted.bam > HCP-CL01-RM16-39MHPC_S6_sorted.freebayes.vcf 
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL01-RM16-38MMEA_S5_sorted.bam > HCP-CL01-RM16-38MMEA_S5_sorted.freebayes.vcf 
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL01-RM16-37RYGT_S4_sorted.bam > HCP-CL01-RM16-37RYGT_S4_sorted.freebayes.vcf 
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL01-RM16-36VRRK_S3_sorted.bam > HCP-CL01-RM16-36VRRK_S3_sorted.freebayes.vcf 
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL02-RM16-48YSA_S15_sorted.bam > HCP-CL02-RM16-48YSA_S15_sorted.freebayes.vcf 
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL02-RM16-49JUGC_S16_sorted.bam > HCP-CL02-RM16-49JUGC_S16_sorted.freebayes.vcf 
+
+
+## 6/19
+170322_NB501330_0078_AHK37HAFXX
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL16-RM17-17ME-S_S16_sorted.bam > HCP-CL16-RM17-17ME-S_S16_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL16-RM17-17ME-B_S13_sorted.bam > HCP-CL16-RM17-17ME-B_S13_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL16-RM17-16MM-S_S15_sorted.bam > HCP-CL16-RM17-16MM-S_S15_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL16-RM17-16MM-B_S12_sorted.bam > HCP-CL16-RM17-16MM-B_S12_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL16-RM17-15MJ-S_S14_sorted.bam > HCP-CL16-RM17-15MJ-S_S14_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL16-RM17-15MJ-B_S11_sorted.bam > HCP-CL16-RM17-15MJ-B_S11_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL16-CAP2017A_S10_sorted.bam > HCP-CL16-CAP2017A_S10_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL16-749SGAL_S9_sorted.bam > HCP-CL16-749SGAL_S9_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL15-Jurkat_S1_sorted.bam > HCP-CL15-Jurkat_S1_sorted.bam.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL15-748RYM_S8_sorted.bam > HCP-CL15-748RYM_S8_sorted.freebayes.vcf
+
+## 
+170203_NB501330_0072_AHJ735AFXX
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL11-Jurkat_S1_sorted.bam > HCP-CL11-Jurkat_S1_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL11-M17-108BCJ_S7_sorted.bam > HCP-CL11-M17-108BCJ_S7_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL11-M17-76LS_S4_sorted.bam > HCP-CL11-M17-76LS_S4_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL11-M17-77CA_S5_sorted.bam > HCP-CL11-M17-77CA_S5_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL11-M17-97GNF_S6_sorted.bam > HCP-CL11-M17-97GNF_S6_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL12-M17-120DLADM_S10_sorted.bam > HCP-CL12-M17-120DLADM_S10_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL12-M17-121JT_S11_sorted.bam > HCP-CL12-M17-121JT_S11_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL12-M17-139DH_S12_sorted.bam > HCP-CL12-M17-139DH_S12_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL12-M17-211PUMF_S13_sorted.bam > HCP-CL12-M17-211PUMF_S13_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL12-M17-245AR_S14_sorted.bam > HCP-CL12-M17-245AR_S14_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL12-M17-246CN_S15_sorted.bam > HCP-CL12-M17-246CN_S15_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL12-M17-278VSZM_S16_sorted.bam > HCP-CL12-M17-278VSZM_S16_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL12-M17-290YMR_S17_sorted.bam > HCP-CL12-M17-290YMR_S17_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL12-M17-74DMC-DUPLICATE_S18_sorted.bam > HCP-CL12-M17-74DMC-DUPLICATE_S18_sorted.freebayes.vcf
+
+
+## 170103_NB501330_0068_AHJ575AFXX
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL07-RM16-75_S1_sorted.bam > HCP-CL07-RM16-75_S1_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL07-RM16-76_S2_sorted.bam > HCP-CL07-RM16-76_S2_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL07-RM16-77_S3_sorted.bam > HCP-CL07-RM16-77_S3_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL07-RM16-79_S4_sorted.bam > HCP-CL07-RM16-79_S4_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL07-RM16-80_S5_sorted.bam > HCP-CL07-RM16-80_S5_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL07-RM16-81_S6_sorted.bam > HCP-CL07-RM16-81_S6_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL08-JurkatB_S12_sorted.bam > HCP-CL08-JurkatB_S12_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL08-M16-2895CS_S8_sorted.bam > HCP-CL08-M16-2895CS_S8_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL08-M16-2917YSCH_S9_sorted.bam > HCP-CL08-M16-2917YSCH_S9_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL08-M16-2929EPM_S10_sorted.bam > HCP-CL08-M16-2929EPM_S10_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL08-M16-2930JZ_S11_sorted.bam > HCP-CL08-M16-2930JZ_S11_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL08-RM16-63B_S13_sorted.bam > HCP-CL08-RM16-63B_S13_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL08-RM16-64B_S14_sorted.bam > HCP-CL08-RM16-64B_S14_sorted.freebayes.vcf
+
+
+
+##161221_NB501330_0064_AHGWCFAFXX
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL05-JurkatA_S1_sorted.bam > HCP-CL05-JurkatA_S1_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL05-RM16-62_S2_sorted.bam > HCP-CL05-RM16-62_S2_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL05-RM16-63_S3_sorted.bam > HCP-CL05-RM16-63_S3_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL05-RM16-64_S4_sorted.bam > HCP-CL05-RM16-64_S4_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL05-RM16-65_S5_sorted.bam > HCP-CL05-RM16-65_S5_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL05-RM16-66_S6_sorted.bam > HCP-CL05-RM16-66_S6_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL05-RM16-67_S7_sorted.bam > HCP-CL05-RM16-67_S7_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL05-RM16-68_S8_sorted.bam > HCP-CL05-RM16-68_S8_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL05-RM16-69_S9_sorted.bam > HCP-CL05-RM16-69_S9_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL05-RM16-70_S10_sorted.bam > HCP-CL05-RM16-70_S10_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL05-RM16-71_S11_sorted.bam > HCP-CL05-RM16-71_S11_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL05-RM16-72_S12_sorted.bam > HCP-CL05-RM16-72_S12_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL05-RM16-73_S13_sorted.bam > HCP-CL05-RM16-73_S13_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL05-RM16-74_S14_sorted.bam > HCP-CL05-RM16-74_S14_sorted.freebayes.vcf
+
+
+##161202_NB501330_0060_AHGWH7AFXX
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL03-RM16-51SQ_S2_sorted.bam> HCP-CL03-RM16-51SQ_S2_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL03-RM16-52YE_S3_sorted.bam> HCP-CL03-RM16-52YE_S3_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL03-RM16-53RJ_S4_sorted.bam > HCP-CL03-RM16-53RJ_S4_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL03-RM16-54LA_S5_sorted.bam > HCP-CL03-RM16-54LA_S5_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL03-RM16-55JR_S6_sorted.bam > HCP-CL03-RM16-55JR_S6_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL03-rRM16-39b_S14_sorted.bam > HCP-CL03-rRM16-39b_S14_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL04-JurkatB_S13_sorted.bam > HCP-CL04-JurkatB_S13_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL04-RM16-56JC_S7_sorted.bam > HCP-CL04-RM16-56JC_S7_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL04-RM16-57MJM_S8_sorted.bam > HCP-CL04-RM16-57MJM_S8_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL04-RM16-58JA_S9_sorted.bam > HCP-CL04-RM16-58JA_S9_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL04-RM16-59MB_S10_sorted.bam > HCP-CL04-RM16-59MB_S10_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL04-RM16-60CF_S11_sorted.bam > HCP-CL04-RM16-60CF_S11_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL04-RM16-61NCAF_S12_sorted.bam > HCP-CL04-RM16-61NCAF_S12_sorted.freebayes.vcf
+
+## 8/8170111_NB501330_0069_AHJFCKAFXX
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL09-UP-1_S2_sorted.bam > HCP-CL09-UP-1_S2_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL09-UP-2_S3_sorted.bam > HCP-CL09-UP-2_S3_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL09-UP-3_S4_sorted.bam > HCP-CL09-UP-3_S4_sorted.freebayes.vcf
+freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 HCP-CL09-UP-4_S5_sorted.bam > HCP-CL09-UP-4_S5_sorted.freebayes.vcf
+
+
+## filter by bed file single
+vcfintersect -b /home/lee/workspace/gene_extraction/gene_list_new_chrom_start_end_gene.bed HCP-CL03-RM16-50EO_S1_sorted.bam.freebayes.vcf > HCP-CL03-RM16-50EO_S1_26_gene_filtered.freebayes.vcf
+
+bedtools intersect -a HCP-CL03-RM16-50EO_S1_sorted.bam.freebayes.vcf -b /home/lee/workspace/gene_extraction/gene_list_new_chrom_start_end_gene.bed > bedtools_26_gene_filtered.freebayes.vcf
+
+### 161130_NB501330_0059_AHGWVLAFXX
+bedtools intersect -a HCP-CL01-RM16-35CA_S2_sorted.bam.freebayes.vcf -b /home/lee/workspace/gene_extraction/gene_list_new_chrom_start_end_gene.bed > HCP-CL01-RM16-35CA_S2_26_gene_filtered.freebayes.vcf
+
+
+
+
+### freebayes(very very slow) only single CPU
+for file in *bam; do
+	filename=${file##*/}
+	basename=${filename%.*}
+	echo 'Executing freebayes variant caller command on file:' $filename	
+	freebayes -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 ${file##*/} > ${filename%.*}.freebayes.vcf ;
+done
+
+
+## make index
+for file in *bam; do
+	filename=${file##*/}
+	basename=${filename%.*}
+	echo 'Executing samtools index command on file:' $filename	
+	samtools index -b ${file##*/} 
+done
+
+
+
+## use freebayes parallel to speed up the process across all CPU
+for file in *bam; do
+	filename=${file##*/}
+	basename=${filename%.*}
+	echo 'Executing freebayes variant caller command on file:' $filename	
+	freebayes-parallel <(fasta_generate_regions.py /media/fs02/reference/hg19/hg19.fasta.fai 100000) 36 -f /media/fs02/reference/hg19/hg19.fasta --min-base-quality 20 --min-alternate-fraction 0.2 --min-alternate-count 2 --min-mapping-quality 0 ${file##*/} > ${filename%.*}.freebayes.vcf
+done
+
+
+;
+
+for file in *_sorted.freebayes.vcf; do 
+	filename=${file##*/}
+	basename=${filename%.*}
+	echo 'Executing bedtools intersect command on file:' $filename	
+	bedtools intersect -a  ${file##*/} -b /home/lee/workspace/gene_extraction/gene_list_new_chrom_start_end_gene.bed > ${filename%.*}.26_gene_filtered.freebayes.vcf
+done
+
+
+for file in *_sorted.freebayes.vcf; do 
+	filename=${file##*/}
+	basename=${filename%.*}
+	echo 'Executing vcf intersect command on file:' $filename	
+	vcfintersect -b /home/lee/workspace/gene_extraction/gene_list_new_chrom_start_end_gene.bed ${filename%.*} > ${filename%.*}.26_gene_filtered.freebayes.vcf
+done
+
+
+
+
+
+freebayes -f /var/www/archer-dependencies/hg19.fa --min-base-quality 20 --min-alternate-fraction 0.001 --min-alternate-count 2 --no-snps --min-mapping-quality 0 /var/www/analysis/4
+670/HCP-CL01-JurkatA_S1_R1_001.molbar.trimmed.deduped.indel.variants.bam
+
+bcftools filter -i "QUAL>=1 & DP>0" /var/www/archer-temp/4670/temp.1/tmpcmWA0N.variations_workflow.freebayes.indel.raw.vcf.gz
+
+bcftools norm -m- /var/www/archer-temp/4670/temp.1/tmp4tZsWg.variations_workflow.vcf.gz
+
+bedtools intersect -a /var/www/archer-temp/4670/temp.1/tmpwNtYZR.variations_workflow.freebayes_ref.vcf -b /var/www/analysis/4670/HCP-CL01-JurkatA_S1_R1_001.molbar.trimmed.deduped.v
+ariant_roi.bed -u

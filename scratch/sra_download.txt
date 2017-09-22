@@ -1,0 +1,1 @@
+while read row; do sra_id=$(esearch -db sra -query $row </dev/null | efetch -format docsum | xtract -pattern Runs -element Run@acc); fastq-dump -A $sra_id --split-files; done < file_with_ids.txt

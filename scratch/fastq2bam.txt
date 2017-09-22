@@ -26,6 +26,13 @@ nohup bcl2fastq --runfolder-dir /media/fs02/NextSeq2017/170509_NB501920_0018_AHL
 
 
 
+nohup bcl2fastq --runfolder-dir /media/fs02/NextSeq2017/170509_NB501920_0018_AHLNKKAFXX -p 12 \
+--output-dir . \
+--sample-sheet /home/lee/workspace/bcl2fastq/samplesheet/SampleSheet_RUN4.csv --no-lane-splitting 
+
+
+
+
 
 
 bcl2fastq --runfolder-dir Data/Intensities/BaseCalls --output-dir . --sample-sheet SampleSheet.csv --no-lane-splitting

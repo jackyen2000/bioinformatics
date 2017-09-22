@@ -1,0 +1,149 @@
+/home/lee/NGS/fastq_screen_v0.11.1/fastq_screen --paired "/media/fs02/Untitled from 170711_M04429_0089_000000000-B9KB4-43255217/G0829712-51907947/G0829712_S2_L001_R1_001.fastq.gz" "/media/fs02/Untitled from 170711_M04429_0089_000000000-B9KB4-43255217/G0829712-51907947/G0829712_S2_L001_R2_001.fastq.gz"
+
+/home/lee/NGS/fastq_screen_v0.11.1/fastq_screen --subset 0 "/media/fs02/Untitled from 170711_M04429_0089_000000000-B9KB4-43255217/G0829712-51907947/G0829712_S2_L001.merged.fastq"
+
+/home/lee/NGS/FLASH-1.2.11/flash "/media/fs02/Untitled from 170711_M04429_0089_000000000-B9KB4-43255217/G0829712-51907947/G0829712_S2_L001_R1_001.fastq.gz" "/media/fs02/Untitled from 170711_M04429_0089_000000000-B9KB4-43255217/G0829712-51907947/G0829712_S2_L001_R2_001.fastq.gz" 2>&1 | tee flash.log
+
+
+
+/home/lee/NGS/FLASH-1.2.11/flash "/media/fs02/Untitled from 170711_M04429_0089_000000000-B9KB4-43255217/G0829705-51911921/G0829705_S1_L001_R1_001.fastq.gz" "/media/fs02/Untitled from 170711_M04429_0089_000000000-B9KB4-43255217/G0829705-51911921/G0829705_S1_L001_R2_001.fastq.gz" 2>&1 | tee flash.log
+
+
+
+
+/home/lee/NGS/fastq_screen_v0.11.1/fastq_screen --subset 0 "/media/fs02/Untitled from 170711_M04429_0089_000000000-B9KB4-43255217/G0829705-51911921/G0829705_S1_L001.merged.fastq"
+
+
+
+
+bowtie2 -p 8 -X 1000 -x /media/fs02/reference/mouse/mm9/Mus_musculus/UCSC/mm9/Sequence/Bowtie2Index/genome -1 /media/fs02/Untitled_from_170711_M04429_0089_000000000-B9KB4-43255217/G0829712-51907947/G0829712_S2_L001_R1_001.fastq.gz -2 /media/fs02/Untitled_from_170711_M04429_0089_000000000-B9KB4-43255217/G0829712-51907947/G0829712_S2_L001_R2_001.fastq.gz -S G0829712_S2_L001_2attempt.sam 
+
+
+
+
+java -Xmx32G -jar /home/lee/NGS/picard.jar MarkDuplicates \
+        INPUT=G0829712_S2_L001_2attempt.sorted.bam \
+        OUTPUT=G0829712_S2_L001_2attempt.sorted_noDup.bam \
+        METRICS_FILE=G0829712_S2_L001_2attempt-metrics.txt
+
+
+## using star BAM
+java -Xmx32G -jar /home/lee/NGS/picard.jar MarkDuplicates \
+        INPUT=G0829712_S2_L001Aligned.sortedByCoord.out.bam \
+        OUTPUT=G0829712_S2_L001Aligned.sortedByCoord_noDup.out.bam \
+        REMOVE_DUPLICATES=TRUE \
+        OPTICAL_DUPLICATE_PIXEL_DISTANCE=2500 \
+        METRICS_FILE=G0829712_S2_L001Aligned.sortedByCoord_noDup-metrics.txt
+
+## using tophat accepted hits BAM
+java -Xmx32G -jar /home/lee/NGS/picard.jar MarkDuplicates \
+        INPUT=accepted_hits.bam \
+        OUTPUT=accepted_hits_noDup.out.bam \
+        OPTICAL_DUPLICATE_PIXEL_DISTANCE=2500 \
+        METRICS_FILE=accepted_hits_noDup-metrics.txt
+
+
+java -Xmx32G -jar /home/lee/NGS/picard.jar CollectAlignmentSummaryMetrics \
+        R=/media/fs02/reference/mouse/mm9/Mus_musculus/UCSC/mm9/Sequence/WholeGenomeFasta/genome.fa \
+        INPUT=G0829712_S2_L001Aligned.sortedByCoord.out.bam \
+		OUTPUT=G0829712_S2_L001Aligned.csv 
+
+
+java -Xmx32G -jar /home/lee/NGS/picard.jar CollectInsertSizeMetrics \
+      I=G0829712_S2_L001Aligned.sortedByCoord.out.bam \
+      O=G0829712_S2_L001Aligned.sortedByCoord_CollectInsertSizeMetrics.txt \
+      H=insert_size_histogram.pdf \
+      M=0.5
+      
+      
+java -Xmx32G -jar /home/lee/NGS/picard.jar CollectWgsMetrics \
+       I=G0829712_S2_L001Aligned.sortedByCoord.out.bam \
+       O=G0829712_S2_L001Aligned.sortedByCoord_CollectWgsMetrics.txt \
+       R=/media/fs02/reference/mouse/mm9/Mus_musculus/UCSC/mm9/Sequence/Bowtie2Index/genome.fa 
+       
+       
+## RNA seq       
+java -Xmx32G -jar /home/lee/NGS/picard.jar CollectRnaSeqMetrics \
+      I=G0829712_S2_L001Aligned.sortedByCoord.out.bam \
+      O=G0829712_S2_L001Aligned.sortedByCoord-RNA_Metrics.txt \
+      STRAND=NONE \
+      REF_FLAT=/media/fs02/reference/mouse/mm9/Mus_musculus/UCSC/mm9/Annotation/Archives/archive-2015-07-17-14-33-26/Genes/refFlat.txt.gz 
+
+
+
+bedtools genomecov -ibam G0829712_S2_L001Aligned.sortedByCoord.out.bam -g /media/fs02/reference/mouse/mm9/Mus_musculus/UCSC/mm9/Sequence/WholeGenomeFasta/genome.fa 
+
+
+
+samtools mpileup G0829712_S2_L001Aligned.sortedByCoord.out.bam | awk '{ count++ ; SUM += $4 } END { print "Total: " SUM "\t" "Nucleotides: " count "\t" "Average_coverage: " SUM/count }'
+
+
+
+bedtools multicov -bams G0829712_S2_L001Aligned.sortedByCoord.out.bam -bed /media/fs02/reference/mouse/mm9/Mus_musculus/UCSC/mm9/Annotation/Archives/archive-2015-07-17-14-33-26/Genes/genes.gtf > bedtool_multicov.txt
+
+
+ parallel  samtools index ::: G0829712_S2_L001Aligned.sortedByCoord.out.bam
+
+
+java -jar /home/lee/NGS/GenomeAnalysisTK.jar \
+   -T DepthOfCoverage \
+   -R /media/fs02/reference/mouse/mm9/Mus_musculus/UCSC/mm9/Sequence/WholeGenomeFasta/genome.fa  \
+   -o /media/fs02/Untitled_from_170711_M04429_0089_000000000-B9KB4-43255217/G0829712-51907947/GATK_depth_of_coverage.txt \
+   -U ALLOW_N_CIGAR_READS \
+   -I G0829712_S2_L001Aligned.sortedByCoord.out.bam
+
+samtools flagstat G0829712_S2_L001Aligned.sortedByCoord.out.bam
+
+
+## make STAR index
+STAR --runThreadN 4 --runMode genomeGenerate --genomeDir /media/fs02/reference/mouse/mm9/Mus_musculus/UCSC/mm9/Sequence/StarIndex --genomeFastaFiles /media/fs02/reference/mouse/mm9/Mus_musculus/UCSC/mm9/Sequence/WholeGenomeFasta/genome.fa --sjdbGTFfile /media/fs02/reference/mouse/mm9/Mus_musculus/UCSC/mm9/Annotation/Archives/archive-2015-07-17-14-33-26/Genes/genes.gtf --sjdbOverhang 100
+
+## run STAR alignment
+STAR --runThreadN 8 \
+     --genomeDir /media/fs02/reference/mouse/mm9/Mus_musculus/UCSC/mm9/Sequence/StarIndex \
+     --readFilesIn <(zcat /media/fs02/Untitled_from_170711_M04429_0089_000000000-B9KB4-43255217/G0829712-51907947/G0829712_S2_L001_R1_001.fastq.gz) <(zcat /media/fs02/Untitled_from_170711_M04429_0089_000000000-B9KB4-43255217/G0829712-51907947/G0829712_S2_L001_R2_001.fastq.gz) \
+     --limitBAMsortRAM 100000000000 \
+     --outFileNamePrefix G0829712_S2_L001 \
+     --outSAMtype BAM SortedByCoordinate \
+     --outSAMunmapped None \
+     --outSAMmapqUnique 50 \
+     --outSAMattrRGline ID:1   SM:CS399882
+     
+
+
+
+
+
+
+
+java -jar /usr/share/picard-tools-1.136/picard.jar CollectAlignmentSummaryMetrics INPUT=Sample_DY10.tophat.bam OUTPUT=tmpmetrics/alignmentmetrics      
+     
+     
+## tophar     
+tophat -p 4 -G /media/fs02/reference/mouse/mm9/Mus_musculus/UCSC/mm9/Annotation/Archives/archive-2015-07-17-14-33-26/Genes/genes.gtf  -o /media/fs02/Untitled_from_170711_M04429_0089_000000000-B9KB4-43255217/G0829712-51907947 --no-novel-juncs /media/fs02/reference/mouse/mm9/Mus_musculus/UCSC/mm9/Sequence/Bowtie2Index/genome G0829712_S2_L001_R1_001.fastq.gz G0829712_S2_L001_R2_001.fastq.gz
+     
+     
+tophat -p 4 -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf -o /media/fs02/Untitled_from_170711_M04429_0089_000000000-B9KB4-43255217/G0829705-51911921 --no-novel-juncs /media/fs02/reference/hg19/bowtie2index/hg19 G0829705_S1_L001_R1_001.fastq.gz G0829705_S1_L001_R2_001.fastq.gz
+    
+    
+    
+    
+scp -r /media/BaseSpace/Projects/22916002_10081002_Run1 /media/fs02
+
+    
+bs cp -v /media/BaseSpace/Projects/22916002_10081002_Run1 /media/NGS_data/22916002_projects   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+     

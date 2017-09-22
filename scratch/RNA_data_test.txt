@@ -1,0 +1,3 @@
+## 1. use cufflink to generate each individual transcripts.gft and change the prefix of the transcript 
+cufflinks -p 20 --library-type fr-firststrand -o /media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/cufflink_result/fulvestrant/G12M119_S8 -G /media/fs02/reference/hg19/annotation/hg19_genes.gtf /media/fs02/NextSeq2017/170417_NB501920_0014_AHJ323BGX2/STAR_Align/G12M119_S8Aligned.sortedByCoord.out.bam; for f in transcripts* ; do mv "$f" "G12M119_S8_$f"; done
+

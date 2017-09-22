@@ -1,0 +1,1 @@
+bedtools intersect -a Oncomine_Lung_cfDNA.04252017.Designed.bed AK0095-v1.0_Target.bed

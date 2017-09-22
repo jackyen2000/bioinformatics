@@ -1,0 +1,16 @@
+STAR --runThreadN 8 \
+     --genomeDir /media/fs02/reference/hg19/starindex \
+     --readFilesIn <(zcat /media/NGS_data/SRA_data/ERR030875_1.fastq.gz) <(zcat /media/NGS_data/SRA_data/ERR030875_2.fastq.gz) \
+     --limitBAMsortRAM 12000000000 \
+     --outFileNamePrefix /media/NGS_data/SRA_data/STAR_Align/ \
+     --outSAMtype BAM   SortedByCoordinate \
+     --outSAMattributes NH   NM   MD \
+	 --outSAMunmapped Within \
+	 --outSAMmapqUnique 50 \
+	 --outSAMattrRGline ID:1   SM:CS399882 \
+	 --outSJfilterCountUniqueMin -1   2   2   2 \
+	 --outSJfilterCountTotalMin -1   2   2   2 \
+	 --outFilterType BySJout \
+	 --outFilterIntronMotifs RemoveNoncanonical \
+	 --sjdbGTFfile /media/fs02/reference/hg19/annotation/genes.gtf \
+	 --twopassMode Basic
