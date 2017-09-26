@@ -31,6 +31,16 @@ nohup bcl2fastq --runfolder-dir /media/fs02/NextSeq2017/170509_NB501920_0018_AHL
 --sample-sheet /home/lee/workspace/bcl2fastq/samplesheet/SampleSheet_RUN4.csv --no-lane-splitting 
 
 
+nohup bcl2fastq --runfolder-dir /media/fs02/NextSeq2017/170822_NB501920_0026_AHNHCHAFXX -p 12 \
+--output-dir . \
+--sample-sheet /media/fs02/NextSeq2017/170822_NB501920_0026_AHNHCHAFXX/SampleSheet.csv --no-lane-splitting 
+
+
+
+## 9/26/2017
+nohup bcl2fastq --runfolder-dir /media/fs02/NextSeq2017/NextSeq2017/170922_NB501920_0027_AHC5YTBGX3 -p 12 \
+--output-dir . \
+--sample-sheet /media/fs02/NextSeq2017/NextSeq2017/170922_NB501920_0027_AHC5YTBGX3/SampleSheet.csv --no-lane-splitting 
 
 
 

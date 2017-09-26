@@ -16,6 +16,12 @@
 # # Jack Yen
 # # Sep 11th, 2017
 # # EDIT: add trimming options, re-direct log into individual txt files for each steps.
+# #
+# # Sep 25th, 2017
+# # EDIT: test trimming options
+# #
+# # Sep26th, 2017
+# # EDIT: add surecalltrimmer instead of Trimmomatic
 # #===========================================================================##
 # #===========================================================================##
 # # All of the general library calls and PATH
@@ -52,7 +58,6 @@ parser.add_argument('--trimming', dest='trimming', action='store_true')
 parser.add_argument('--no-trimming', dest='trimming', action='store_false')
 parser.set_defaults(trimming=False)
 
-
 args = parser.parse_args()
 runName = args.runName
 sampleId = args.sampleId
@@ -69,7 +74,10 @@ print 'the FASTQ directory is at: ',fastq_dir
 ## reference
 #reference_test = r'/Volumes/lab data/reference/hg19/hg19.fasta'
 reference = r'/media/fs02/reference/hg19/hg19.fasta'
+adapter = 'ILLUMINACLIP:/home/lee/NGS/Trimmomatic-0.36/adapters/TruSeq3-PE.fa:2:30:10'
 
+# this is the QXT
+#adapter = 'ILLUMINACLIP:/home/lee/NGS/Trimmomatic-0.36/adapters/QXTIllumina-PE.fa:2:30:10'
 
 '''
 Define reference and software BWA, samtools, PICARD, GATK, Trimmomatic
@@ -82,6 +90,9 @@ picard_more_memory  = 'java -jar -Xmx20g ' + PICARD_JAR
 
 TRIMMOMATIC_JAR = '/home/lee/NGS/Trimmomatic-0.36/trimmomatic-0.36.jar'
 trimmomatic     = 'java -jar '+TRIMMOMATIC_JAR
+
+SURECALLTRIMMER_JAR = '/home/lee/NGS/AGeNT/SurecallTrimmer_v4.0.1.jar'
+surecalltrimmer     = 'java -jar '+SURECALLTRIMMER_JAR
 
 GATK_JAR = '/home/lee/NGS/GenomeAnalysisTK.jar'
 gatk     = 'java -jar -Xmx2g '+GATK_JAR
@@ -125,37 +136,95 @@ except OSError as exception:
         raise
 
 
+# ### if not batch, execute by individual sampleID
+# if trimming:
+#     for index,file in enumerate(read1_lanes):
+#         # Trimmomatic inputs
+#         read1 = read1_lanes[index]
+#         read2 = read2_lanes[index]
+#
+#         # Trimmomatic outputs
+#         lane = index + 1
+#
+#         # Trimmomatic command
+#         trim_option1 = trimmomatic +' PE'+ ' ' +'-threads'+' 20 '+ read1 + ' ' + read2  + ' '
+#         trim_option2 = sampleId+'_trim_paired.1.fastq.gz ' + sampleId+'_trim_unpaired.1.fastq.gz ' + sampleId+'_trim_paired.2.fastq.gz ' + sampleId+'_trim_unpaired.2.fastq.gz '
+#         trim_option3 = 'ILLUMINACLIP:/home/lee/NGS/Trimmomatic-0.36/adapters/TruSeq3-PE.fa:2:30:10'
+#
+#         trim_cmd = trim_option1 + trim_option2 + trim_option3
+#         #cmd += 'CROP:' + str(crop)
+#         os.chdir(fastq_dir)
+#         #log.info(cmd)
+#         subprocess.call(trim_cmd, shell=True,
+#                                       stdout=open(os.path.join(output_dir, sampleId + '_trim_pipeline_log.txt'), 'wt'),
+#                                       stderr=subprocess.STDOUT)
+#
+#         #os.system(cmd)
+#
+#     read1_lanes_trimmed = []
+#     read2_lanes_trimmed = []
+#     r1_pattern = re.compile(r'.*\_paired\.1\.fastq\.gz')
+#     r2_pattern = re.compile(r'.*\_paired\.2\.fastq\.gz')
+#
+#
+#     for fastq in glob.glob(os.path.join(fastq_dir,'*.fastq.gz')):
+#         print fastq
+#         #print fastq
+#         if r1_pattern.match(fastq):
+#             read1_lanes_trimmed.append(fastq)
+#         elif r2_pattern.match(fastq):
+#             read2_lanes_trimmed.append(fastq)
+#         else:
+#             log.warn("FASTQ File %s did not match pattern", fastq)
+#
+#     read1_lanes = read1_lanes_trimmed
+#     read2_lanes = read2_lanes_trimmed
+#
+#     log.info("Found %d lanes for sample %s", len(read1_lanes))
+#     print 'Trimmed FASTQ files: ',read1_lanes, read2_lanes
+#
+
+## Agilent SurecallTrimmer
 ### if not batch, execute by individual sampleID
 if trimming:
     for index,file in enumerate(read1_lanes):
-        # Trimmomatic inputs
+        # surecall inputs
         read1 = read1_lanes[index]
         read2 = read2_lanes[index]
 
-        # Trimmomatic outputs
+        # surecalltrimmer outputs
         lane = index + 1
 
-        # Trimmomatic command
-        cmd = trimmomatic + ' ' + read1 + ' ' + read2  + ' ' + 'lane' + str(lane)
-        cmd += '.paired.1.fastq.gz ' + 'lane' + str(lane) + '.unpaired.1.fastq.gz ' + 'lane' + str(lane) + '.paired.2.fastq.gz ' + 'lane' + str(lane) + '.unpaired.2.fastq.gz '
+        # surecalltrimmer command
+        trim_option1 = ' -fq1 '
+        trim_option2 = ' -fq2 '
+        trim_option3 = ' -qxt'
+        trim_option4 = ' -qualityTrimming 20 -minFractionRead 50 -idee_fixe'
+        trim_option5 = ' -out_loc '
+
+        trim_cmd = surecalltrimmer + trim_option1 + read1 + trim_option2 + read2 + trim_option3 + trim_option4 + trim_option5 + fastq_dir
         #cmd += 'CROP:' + str(crop)
         os.chdir(fastq_dir)
-        log.info(cmd)
-        os.system(cmd)
+        #log.info(cmd)
+        print "====== Running SureCall Trimmer ======="
+        subprocess.call(trim_cmd, shell=True,
+                                      stdout=open(os.path.join(output_dir, sampleId + '_trim_pipeline_log.txt'), 'wt'),
+                                      stderr=subprocess.STDOUT)
 
+        #os.system(cmd)
     read1_lanes_trimmed = []
     read2_lanes_trimmed = []
-    r1_pattern = re.compile(r'.*\.paired\.1\.fastq\.gz')
-    r2_pattern = re.compile(r'.*\.paired\.2\.fastq\.gz')
+    r1_pattern = re.compile(r'.*\_R1_001.*\_Cut\_0\.fastq\.gz')
+    r2_pattern = re.compile(r'.*\_R2_001.*\_Cut\_0\.fastq\.gz')
 
 
     for fastq in glob.glob(os.path.join(fastq_dir,'*.fastq.gz')):
         print fastq
         #print fastq
         if r1_pattern.match(fastq):
-            read1_lanes.append(fastq)
+            read1_lanes_trimmed.append(fastq)
         elif r2_pattern.match(fastq):
-            read2_lanes.append(fastq)
+            read2_lanes_trimmed.append(fastq)
         else:
             log.warn("FASTQ File %s did not match pattern", fastq)
 
@@ -163,7 +232,9 @@ if trimming:
     read2_lanes = read2_lanes_trimmed
 
     log.info("Found %d lanes for sample %s", len(read1_lanes))
-    print 'FASTQ files: ',read1_lanes, read2_lanes
+    print 'Trimmed FASTQ files: ',read1_lanes, read2_lanes
+
+
 
 
 ## Align FASTQ
@@ -198,7 +269,7 @@ for index,file in enumerate(read1_lanes):
     #outfile = open(samplename + '_sorted.bam','w')
     log.info(bwa_cmd)
     print "====== Running BWA Mem into memory ======="
-    bwa_process     = subprocess.call(bwa_cmd,shell=True,stdout=open(os.path.join(output_dir,sampleId+'_bwa_pipeline_log.txt'),'wt'),stderr=subprocess.STDOUT)
+    subprocess.call(bwa_cmd,shell=True,stdout=open(os.path.join(output_dir,sampleId+'_bwa_pipeline_log.txt'),'wt'),stderr=subprocess.STDOUT)
     #bwa_process = subprocess.Popen(bwa_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE,shell=True)
     #stdout, stderr = bwa_process.communicate()
     sam_file_list.append(sam)
@@ -218,10 +289,11 @@ for file in sam_file_list:
     option1 = ' R=/media/fs02/reference/hg19/hg19.fasta'
     option2 = ' I='
     option3 = ' O='
+    option4 = ' CREATE_INDEX=TRUE'
 
     #merge_input_string = merge_input_string + ' I=' + file
     tmp_dir = '`pwd`/'+sampleId+'/tmp'
-    sort_cmd = picard_more_memory +' SortSam VALIDATION_STRINGENCY=SILENT Sort_Order=coordinate'+ option2 + file + option3 + BAM + ' TMP_DIR=' + tmp_dir
+    sort_cmd = picard_more_memory +' SortSam VALIDATION_STRINGENCY=SILENT Sort_Order=coordinate'+ option2 + file + option3 + BAM + ' TMP_DIR=' + tmp_dir + option4
     print sort_cmd
     log.info(sort_cmd)
 
@@ -235,9 +307,9 @@ for file in sam_file_list:
 
     ## index sorted_BAM
     #inedx_bam = 'samtools index '+BAM
-    index_bam = picard +' BuildBamIndex' + option2 +BAM
-    print ('======= BAM index Running =======')
-    subprocess.call(index_bam,shell=True,stdout=open(os.path.join(output_dir,sampleId+'_indexBAM_pipeline_log.txt'),'wt'),stderr=subprocess.STDOUT)
+    #index_bam = picard +' BuildBamIndex' + option2 +BAM
+    #print ('======= BAM index Running =======')
+    #subprocess.call(index_bam,shell=True,stdout=open(os.path.join(output_dir,sampleId+'_indexBAM_pipeline_log.txt'),'wt'),stderr=subprocess.STDOUT)
 
 
 ## RUN GATK
@@ -249,8 +321,10 @@ for bam in glob.glob(os.path.join(output_dir,'*_sorted.bam')):
     option2 = ' -I '
     option3 = ' -o '
     option4 = ' -glm BOTH'
+    option5 = ' -nct 10 '
+    option6 = ' -nt 10 '
     print ('======= GATK unifiedGenotyper Running =======')
-    GATK_cmd =gatk_more_memory + ' -T UnifiedGenotyper' + option1 + option2 + bam + option3 + VCF + option4
+    GATK_cmd =gatk_more_memory + ' -T UnifiedGenotyper' + option5 + option6 + option1 + option2 + bam + option3 + VCF + option4
     subprocess.call(GATK_cmd, shell=True,
                     stdout=open(os.path.join(output_dir, sampleId + '_GATK_pipeline_log.txt'), 'wt'),
                     stderr=subprocess.STDOUT)
