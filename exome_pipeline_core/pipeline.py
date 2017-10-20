@@ -70,7 +70,6 @@ work_dir = args.work_dir
 trimming = args.trimming
 
 #### Slack authentication
-SLACK_TOKEN="xoxp-166523070336-166523070800-249248281814-724f3dc0f200e732a6ca9e071951b6cf"
 slack_client = SlackClient(SLACK_TOKEN)
 
 def send_message(channel_id, message):
