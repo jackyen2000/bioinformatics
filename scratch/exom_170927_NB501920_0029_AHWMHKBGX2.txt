@@ -1,0 +1,59 @@
+## 9/29/2017
+
+## demultiplex start 3:30pm
+nohup bcl2fastq --runfolder-dir /media/fs02/NextSeq2017/170927_NB501920_0029_AHWMHKBGX2 -p 12 \
+--output-dir . \
+--sample-sheet /media/fs02/NextSeq2017/170927_NB501920_0029_AHWMHKBGX2/SampleSheet.csv --no-lane-splitting 
+
+## move FASTQ to individual folder
+## this script move FASTQ to individual folder so it's easy to organize
+for file in *fastq.gz; do 
+	fastqname=${file##*/}
+	basename=${fastqname%_R*_001.fastq.gz}
+	echo $basename	
+	mkdir -p $basename
+	mv $fastqname $basename
+	#cp $fastqname $basename
+done
+
+## split into two batch
+CS163324_S5 CS163568_S6 CS162256_S4 CS160062_S2 CS160107_S3 CS159169_S1
+CS164839_S11 CS166218_S12 CS164387_S10 CS163898_S8 CS164301_S9 CS163754_S7
+
+## batch 1 start at 9/29/2017 6:20pm
+parallel --verbose --eta --progress --bar python /media/NGS_data/workspace/py/pipeline2.py -w /media/fs02/NextSeq2017/ -r 170927_NB501920_0029_AHWMHKBGX2 --trimming -s ::: CS163324_S5 CS163568_S6 CS162256_S4 CS160062_S2 CS160107_S3 CS159169_S1
+
+## batch 2 start at 9/30/2017 11:12am
+parallel --verbose --eta --progress --bar python /media/NGS_data/workspace/py/pipeline2.py -w /media/fs02/NextSeq2017/ -r 170927_NB501920_0029_AHWMHKBGX2 --trimming -s ::: CS164839_S11 CS166218_S12 CS164387_S10 CS163898_S8 CS164301_S9 CS163754_S7
+
+
+
+## run the v6_QXT_200x_NA12878
+parallel --verbose --eta --progress --bar python /media/NGS_data/workspace/py/pipeline2.py -w /media/ -r fs02 --trimming -s ::: v6_QXT_200x_NA12878
+
+
+
+
+java -Xmx2g -jar /home/lee/NGS/picard.jar CollectHsMetrics \
+BI=/media/fs02/reference/hg19/bait.list.interval_list \
+TI=/media/fs02/reference/hg19/target.list.interval_list \
+I=v6_QXT_200x_NA12878_sorted.bam \
+O=v6_QXT_200x_NA12878_exomeHSmetrics.txt
+
+
+
+## markduplicates    
+java -Xmx2g -jar /home/lee/NGS/picard.jar MarkDuplicates REMOVE_DUPLICATES=true VALIDATION_STRINGENCY=SILENT \
+      I=CS160062_S2_sorted.bam \
+      O=CS160062_S2_sorted_deduplicates.bam \
+      M=CS160062_S2_sorted_marked_dedup_metrics.txt    
+
+
+
+java -Xmx2g -jar /home/lee/NGS/picard.jar CollectHsMetrics \
+BI=/media/fs02/reference/hg19/bait.list.interval_list \
+TI=/media/fs02/reference/hg19/target.list.interval_list \
+I=v6_QXT_200x_NA12878_sorted_duplicates.bam \
+O=v6_QXT_200x_NA12878_sorted_deduplicates_collect_exomeHSmetrics.txt      
+      
+      

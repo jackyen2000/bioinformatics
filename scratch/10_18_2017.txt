@@ -1,0 +1,79 @@
+## BWA
+
+## need to do merge lanes first
+bwa mem -aM -R "@RG\tID:Seq01p\tSM:Seq01\tPL:ILLUMINA\tPI:330" Refgen Seq01pair1.fastq Seq01pair2.fastq > Seq01pairs.sam
+
+
+bwa mem -t 20 -v 3 -aM -R "@RG\tID:252-17-001-3-49864821\tPU:1\tSM:CS412619" /media/fs02/reference/hg19/hg19.fasta CS412619_S3_R1_001.fastq.gz CS412619_S3_R2_001.fastq.gz  > CS412619_S3.sam
+
+
+# picard sort
+
+
+java -Xmx20g -jar  /home/lee/NGS/picard.jar SortSam VALIDATION_STRINGENCY=SILENT Sort_Order=coordinate \
+I=/media/fs02/NextSeq2017/171012_NB501920_0030_AHNFYHAFXX/252-17-001-3-49864821/CS412619-59579603/CS412619_S3.sam \
+O=/media/fs02/NextSeq2017/171012_NB501920_0030_AHNFYHAFXX/252-17-001-3-49864821/CS412619-59579603/CS412619_S3_sorted.bam \
+CREATE_INDEX=True \
+TMP_DIR=/media/fs02/NextSeq2017/171012_NB501920_0030_AHNFYHAFXX/252-17-001-3-49864821/CS412619-59579603/tmp 
+
+
+java -Xmx20g -jar  /home/lee/NGS/picard.jar  MarkDuplicates REMOVE_DUPLICATES=TRUE VALIDATION_STRINGENCY=SILENT \
+I=/media/fs02/NextSeq2017/171012_NB501920_0030_AHNFYHAFXX/252-17-001-3-49864821/CS412619-59579603/CS412619_S3_sorted.bam \
+O=/media/fs02/NextSeq2017/171012_NB501920_0030_AHNFYHAFXX/252-17-001-3-49864821/CS412619-59579603/CS412619_S3_sorted_dedup.bam \
+M=/media/fs02/NextSeq2017/171012_NB501920_0030_AHNFYHAFXX/252-17-001-3-49864821/CS412619-59579603/CS412619_S3_dedup_metrics.txt 
+
+
+java -Xmx20g -jar /home/lee/NGS/picard.jar CollectAlignmentSummaryMetrics \
+R=/media/fs02/reference/hg19/hg19.fasta \
+I=/media/fs02/NextSeq2017/171012_NB501920_0030_AHNFYHAFXX/252-17-001-3-49864821/CS412619-59579603/CS412619_S3_sorted_dedup.bam \
+O=/media/fs02/NextSeq2017/171012_NB501920_0030_AHNFYHAFXX/252-17-001-3-49864821/CS412619-59579603/CS412619_S3_alignment_metrics.txt
+
+
+java -Xmx20g -jar /home/lee/NGS/picard.jar CollectAlignmentSummaryMetrics \
+R=/media/fs02/reference/hg19/hg19.fasta \
+I=/media/fs02/NextSeq2017/171012_NB501920_0030_AHNFYHAFXX/252-17-001-3-49864821/CS412619-59579603/CS412619_S3_sorted.bam \
+O=/media/fs02/NextSeq2017/171012_NB501920_0030_AHNFYHAFXX/252-17-001-3-49864821/CS412619-59579603/CS412619_S3_sorted_alignment_metrics.txt
+
+/home/lee/NGS/fastq_screen_v0.11.1/fastq_screen --paired "CS412619_S3_R1_001.fastq.gz" "CS412619_S3_R2_001.fastq.gz"
+
+
+## collect targetpctmetrics
+java -Xmx20g -jar /home/lee/NGS/picard.jar CollectTargetedPcrMetrics \
+I=/media/fs02/NextSeq2017/171012_NB501920_0030_AHNFYHAFXX/252-17-001-3-49864821/CS412619-59579603/CS412619_S3_sorted.bam \
+O=/media/fs02/NextSeq2017/171012_NB501920_0030_AHNFYHAFXX/252-17-001-3-49864821/CS412619-59579603/CS412619_S3_sorted_pcr_metrics.txt \
+R=/media/fs02/reference/hg19/hg19.fasta \
+AMPLICON_INTERVALS=/media/fs02/reference/hg19/TruSeq_CAT_TC0124593-CAT_amplicon.interval_list \
+TARGET_INTERVALS=/media/fs02/reference/hg19/TruSeq_CAT_TC0124593-CAT_target.interval_list
+
+
+java -Xmx20g -jar /home/lee/NGS/picard.jar BedToIntervalList \
+I=TruSeq_CAT_TC0124593-CAT_amplicon.txt \
+O=TruSeq_CAT_TC0124593-CAT_amplicon.interval_list \
+SD=hg19.dict
+
+## manifest to bed
+cut -d "," -f 1,2,3 truseq_amplicon_manifest.txt | sed -e 's/,/\t/' | grep "^X" | sort -n -k2 | awk 'BEGIN{OFS="\t"};{print "chr"$1,$2,$2}' > truseq_amplicon_cancer_panel_manifest_afp1_pn15032433_b.bed
+
+printf '%s' $(cut -f 1,2,3 TruSeq_CAT_TC0124593-CAT_target.txt) | sed -e 's/,/\t/' | sort -n -k2 | awk 'BEGIN{OFS="\t"};{print "chr"$1,$2,$2}'
+
+
+
+
+
+
+
+### GATK
+java -Xmx2g -jar /home/lee/NGS/GenomeAnalysisTK.jar \
+-T UnifiedGenotyper -nct 10 -nt 10 \
+-R /media/fs02/reference/hg19/hg19.fasta \
+-I CS156185_S1_sorted_duplicates.bam \
+-o CS156185_S1_sorted_dedup_unifiedgenotyper_conf20.vcf \
+-glm BOTH \
+-stand_call_conf 20
+
+
+
+
+
+
+

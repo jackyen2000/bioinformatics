@@ -1,0 +1,79 @@
+
+### this will work
+bwa mem -t 20 -v 3  -R "@RG        ID:252-17-001-2-47635615        PU:1    SM:CS411720_RA_CAT-57199161" "/media/fs02/reference/hg19/hg19.fasta" "/media/NGS_data/RA/252-17-001-2-47635615/CS411720_RA_CAT-57199161/CS411720-RA-CAT_S3_L001_R1_001.fastq.gz" "/media/NGS_data/RA/252-17-001-2-47635615/CS411720_RA_CAT-57199161/CS411720-RA-CAT_S3_L001_R2_001.fastq.gz" > /media/NGS_data/RA/252-17-001-2-47635615/CS411720_RA_CAT-57199161/pipeline_output/CS411720_RA_CAT-57199161.sam
+
+## picard
+
+java -jar -Xmx20g /home/lee/NGS/picard.jar SortSam VALIDATION_STRINGENCY=SILENT Sort_Order=coordinate \
+R=/media/fs02/reference/hg19/hg19.fasta \
+I=CS411720-RA-CAT_S3.sam \
+O=CS411720-RA-CAT_S3_sorted.bam \
+TMP_DIR=`pwd`/tmp CREATE_INDEX=TRUE
+
+
+
+java -jar -Xmx20g /home/lee/NGS/picard.jar AddOrReplaceReadGroups VALIDATION_STRINGENCY=SILENT \
+I=CS411720-RA-CAT_S3_sorted.bam \
+O=CS411720-RA-CAT_S3_sorted.bam \
+RGID=1 \
+RGLB=lib1 \
+RGPL=illumina \
+RGPU=unit1 \
+RGSM=20
+
+
+
+
+
+
+java -jar -Xmx20g /home/lee/NGS/picard.jar MarkDuplicates REMOVE_DUPLICATES=TRUE VALIDATION_STRINGENCY=SILENT \
+CREATE_INDEX=TRUE \
+I=CS411720-RA-CAT_S3_sorted.bam \
+O=CS411720-RA-CAT_S3_sorted_dedup.bam \
+M=CS411720-RA-CAT_S3_sorted_markDupmetrics.txt
+
+
+
+java -jar -Xmx20g /home/lee/NGS/picard.jar CollectAlignmentSummaryMetrics \
+R=/media/fs02/reference/hg19/hg19.fasta \
+I=CS411720-RA-CAT_S3_sorted_dedup.bam \
+O=CS411720-RA-CAT_S3_alignment_metrics.txt
+
+
+java -Xmx50g -jar /home/lee/NGS/GenomeAnalysisTK.jar \
+-T UnifiedGenotyper -nt 10 \
+-R /media/fs02/reference/hg19/hg19.fasta \
+-I CS411720_RA_CAT-57199161_sorted.bam \
+-o CS411720_RA_CAT-57199161_sorted.vcf -glm BOTH \
+--output_mode EMIT_ALL_SITES
+
+
+python /media/NGS_data/workspace/py/pipeline2.py -w /media/NGS_data/RA/ -r 252-17-001-2-47635615 --no-trimming -s CS411720_RA_CAT-57199161
+
+
+
+
+
+
+
+parallel --verbose --eta --bar python /media/NGS_data/workspace/py/pipeline3.py -w /media/fs02/TMB/ -r 170926_NB501920_0028_AHC5WMBGX3 --trimming -s ::: CS156185_S1 CS156186_S2
+
+
+
+
+
+
+
+
+## 10/16/2017
+
+for samplename in $(ls *fastq.gz | cut -d_ -f1 | sort -u); do echo "working at ${samplename}" ; bs upload sample -p "252-17-001-3" ${samplename}*.fastq.gz ; done
+
+find .  -name '*.genome.vcf.gz'
+
+ 
+
+bs -v --dry-run 
+
+
+bs upload 

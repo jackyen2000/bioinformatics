@@ -23,19 +23,19 @@ from cyvcf2 import VCF
 #work_dir = r"/Users/chiyuyen/Desktop/"
 #os.chdir(work_dir)
 ### parse arguments
-parser = argparse.ArgumentParser()
-parser.add_argument('-r',dest='run_dir',help=('full path of running directory wit data'))
-parser.add_argument('-n',dest='file_name',help=('output file name'))
+#parser = argparse.ArgumentParser()
+#parser.add_argument('-r',dest='run_dir',help=('full path of running directory wit data'))
+#parser.add_argument('-n',dest='file_name',help=('output file name'))
 
 
-args = parser.parse_args()
+#args = parser.parse_args()
 
 #data = r"/Volumes/NGS_data/scratch/vcf"
-data = args.run_dir
-file_name = args.file_name
+#data = args.run_dir
+#file_name = args.file_name
 
 
-#data = r"/Users/chiyuyen/Desktop/new_vcf/10_16_2017"
+data = r"/Users/chiyuyen/Desktop/new_vcf/10_17_2017"
 
 df_vf = pandas.DataFrame()
 df_variants = pandas.DataFrame()
@@ -43,8 +43,8 @@ df = pandas.DataFrame()
 df_2 = pandas.DataFrame()
 big_data_frame = pandas.DataFrame()
 
-#writer = pandas.ExcelWriter('/Users/chiyuyen/Desktop/new_vcf/10_16_2017/genome_10_17_2017.xlsx',engine='xlsxwriter')
-writer = pandas.ExcelWriter(file_name,engine='xlsxwriter')
+writer = pandas.ExcelWriter('/Users/chiyuyen/Desktop/new_vcf/10_17_2017/genome_10_17_2017.xlsx',engine='xlsxwriter')
+#writer = pandas.ExcelWriter(file_name,engine='xlsxwriter')
 count = 0
 
 #data_string = ''
@@ -97,8 +97,11 @@ for file in glob.glob(os.path.join(data,"*.vcf.gz")):
     df['VF'] = df_vf.values
     #df_vf.index = df.index
 
-    df[df.FILTER_PASS == True].to_excel(writer, sheet_name=sheet, header=True, index=False)
 
+    #df[df.FILTER_PASS == True].to_excel(writer, sheet_name=sheet, header=True, index=False)
+
+    ## filter pass == True and DP >= 20
+    df[(df.FILTER_PASS) == True & (df.DP >= 20)].to_excel(writer, sheet_name=sheet, header=True, index=False)
     #df_vf.to_csv('/Users/chiyuyen/Desktop/test.csv')
     #df['AD'] = df_2_t['calldata/AD'].values
     #df['GT'] = df_2_t['calldata/GT'].values

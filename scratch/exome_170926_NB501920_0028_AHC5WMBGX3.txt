@@ -1,0 +1,158 @@
+## 9/27/2017
+
+## demultiplex finish at 7:30pm start at 5:20
+nohup bcl2fastq --runfolder-dir /media/fs02/NextSeq2017/170926_NB501920_0028_AHC5WMBGX3 -p 12 \
+--output-dir . \
+--sample-sheet /media/fs02/NextSeq2017/170926_NB501920_0028_AHC5WMBGX3/SampleSheet.csv --no-lane-splitting 
+
+
+## move FASTQ to individual folder
+## this script move FASTQ to individual folder so it's easy to organize
+for file in *fastq.gz; do 
+	fastqname=${file##*/}
+	basename=${fastqname%_R*_001.fastq.gz}
+	echo $basename	
+	mkdir -p $basename
+	#mv $fastqname $basename
+	cp $fastqname $basename
+done
+
+
+zcat CS156185_S1_R1_001.fastq.gz | grep CGGTGGAGCTGTGCGTAGATGTGATCAAGAGACAG
+
+zcat CS156185_S1_R2_001.fastq.gz | head -n 20000 | grep GCTGACGTCGAGACTTGTGATCAAGAGACAG
+
+
+
+## start at 9/27/2017 7:42pm 12 samples (fail) :( ran out of memory, machine crash
+## start first group at 9/28/2017 10:00am 6 samples, split into two groups finish at 9/28/2017 11:30pm
+parallel --verbose --eta --progress --bar python /media/NGS_data/workspace/py/pipeline2.py -w /media/fs02/NextSeq2017/ -r 170926_NB501920_0028_AHC5WMBGX3 --trimming -s ::: CS156190_S6 CS156189_S5 CS156188_S4 CS156187_S3 CS156186_S2 CS156185_S1 
+
+## start at 9/28/2017 11:30pm
+parallel --verbose --eta --progress --bar python /media/NGS_data/workspace/py/pipeline2.py -w /media/fs02/NextSeq2017/ -r 170926_NB501920_0028_AHC5WMBGX3 --trimming -s ::: CS158185_S11 CS158978_S12 CS158024_S10 CS156193_S8 CS157712_S9 CS156191_S7 
+
+
+
+## merge fastq files 
+cat CS156185_S1_R1_001.fastq.gz1506607279205_Cut_0.fastq.gz CS156185_S1_R2_001.fastq.gz1506607279707_Cut_0.fastq.gz > CS156185_S1_Cut_merged.fastq.gz
+
+
+### picard markduplicates
+java -jar picard.jar MarkDuplicates \
+      I=input.bam \
+      O=marked_duplicates.bam \
+      M=marked_dup_metrics.txt
+      
+# Mark Duplicates
+def picard_mark_duplicates(dir,BAM):
+    duplicate_metrics = os.path.join(dir,'picard_mark_duplicates_metric_file')
+    logFile = os.path.join(dir,'picard_mark_duplicates_metric_file_log.txt')
+    option0 = 'VALIDATION_STRINGENCY=SILENT  INPUT=' + BAM
+    option1 = ' REMOVE_DUPLICATES=TRUE '
+    option2 = ' METRICS_FILE=' + duplicate_metrics
+    option3 = ' OUTPUT=' + os.path.join(dir,'sorted_rmdup.bam')
+    cmd = picard_more_memory + ' MarkDuplicates ' + option0 + option1 + option2 + option3
+    print cmd
+    subprocess.call(cmd,shell=True,stdout=open(logFile,'wt'),stderr=subprocess.STDOUT)
+    return duplicate_metrics      
+    
+    
+    
+## 
+java -Xmx2g -jar /home/lee/NGS/picard.jar CollectWgsMetrics R=/media/fs02/reference/hg19/hg19.fasta I=CS156186_S2_sorted.bam O=CS156186_S2_exome_metrics.txt
+
+
+java -Xmx2g -jar /home/lee/NGS/picard.jar CollectHsMetrics \
+BI=/media/fs02/reference/hg19/bait.list.interval_list \
+TI=/media/fs02/reference/hg19/target.list.interval_list \
+I=CS166218_S12_sorted_deduplicates.bam \
+O=CS166218_S12_sorted_deduplicates_exomeHSmetrics.txt
+
+
+
+## insertsize 
+java -Xmx2g -jar /home/lee/NGS/picard.jar CollectInsertSizeMetrics \
+      I=CS156185_S1_sorted.bam \
+      O=CS156185_S1_insert_size_metrics.txt \
+      H=CS156185_S1_insert_size_histogram.pdf \
+      M=0.5    
+    
+## bamstats    
+java -Xmx2g -jar /home/lee/NGS/BAMStats-1.25/BAMStats-1.25.jar -i CS156185_S1_sorted.bam
+    
+## target    
+java -Xmx2g -jar /home/lee/NGS/picard.jar BedToIntervalList \
+      I=sureselect_QXT_S07604514_Regions.bed \
+      O=target.list.interval_list \
+      SD=hg19.dict    
+      
+## bait     
+java -Xmx2g -jar /home/lee/NGS/picard.jar BedToIntervalList \
+      I=sureselect_QXT_S07604514_Covered.bed \
+      O=bait.list.interval_list \
+      SD=hg19.dict    
+           
+      
+## create dictionary file      
+java -Xmx2g -jar /home/lee/NGS/picard.jar CreateSequenceDictionary R=hg19.fasta O=hg19.dict      
+    
+        
+    
+## markduplicates    
+java -Xmx2g -jar /home/lee/NGS/picard.jar MarkDuplicates \
+      I=CS156185_S1_sorted.bam \
+      O=CS156185_S1_sorted_duplicates.bam \
+      M=CS156185_S1_sorted_marked_dup_metrics.txt    
+      
+      
+      
+genomeCoverageBed -d -ibam CS156185_S1_sorted.bam -g CS156185_S1_genome_coverage.csv > CS156185_S1_genome_coverage.csv    
+
+
+
+
+java -Xmx2g -jar /home/lee/NGS/picard.jar CollectHsMetrics \
+VALIDATION_STRINGENCY=SILENT \
+REFERENCE_SEQUENCE=/media/fs02/reference/hg19/hg19.fasta \
+BI=/media/fs02/reference/hg19/bait.list.interval_list \
+TI=/media/fs02/reference/hg19/target.list.interval_list \
+I=CS156185_S1_sorted_duplicates.bam \
+O=CS156185_S1_sorted_duplicates_collect_exomeHSmetrics.txt \
+PER_TARGET_COVERAGE=CS156185_S1_PerTargetMetrics.txt
+
+
+bedtools coverage -abam CS156185_S1_sorted_duplicates.bam -b /media/fs02/reference/hg19/sureselect_QXT_S07604514_Regions.bed -hist > hist.txt
+
+bedtools coverage -hist -abam CS156185_S1_sorted_duplicates.bam -b /media/fs02/reference/hg19/sureselect_QXT_S07604514_Regions.bed | grep ^all > s1_align.hist.txt
+
+
+
+### coverage   
+### total depth on target
+bedtools coverage -a /media/fs02/reference/hg19/sureselect_QXT_S07604514_Regions.bed -b *_sorted_deduplicates.bed.gz -d | gzip > coverage.tsv.gz
+gunzip -c coverage.tsv.gz | wc -l
+gunzip -c coverage.tsv.gz | awk '$6>13.5897688 {print}' | wc -l
+
+
+
+
+  
+  
+  
+### re-run GATK on dedup BAM
+
+### GATK
+java -Xmx2g -jar /home/lee/NGS/GenomeAnalysisTK.jar \
+-T UnifiedGenotyper -nt 10 \
+-R /media/fs02/reference/hg19/hg19.fasta \
+-I CS163568_S6_sorted_deduplicates.bam \
+-o CS163568_S6_dedup.vcf -glm BOTH
+
+
+
+
+
+# 
+
+
+samtools depth CS156185_S1_sorted_duplicates.bam > CS156185_S1_sorted_dedup_coverage.txt

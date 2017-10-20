@@ -117,7 +117,7 @@ for fastq_dir_item in fastq_dir:
 #    output = p.communicate()[0]
 #    return output
 
-class BwaMemTask(luigi.ExternalTask):
+class BwaMemTask(luigi.Task):
 
     # Ideally we have to show this but for now I am gonna fake it by creating a list of sample IDs
     # fastq_path = luigi.Parameter()
@@ -278,13 +278,20 @@ class CallVariantTask(luigi.ExternalTask):
 
 class CustomGenomePipelineTask(luigi.Task):
 
+        work_dir = luigi.Parameter()
+        runName  = luigi.Parameter()
+        sample_list = luigi.Parameter()
+
     def requires(self):
         #return [Convert_Bcf_Vcf(sample) for sample in sample_list]
         #work_dir = WORK_DIR
         #tasks = [CallVariantTask(sample) for sample in sample_list]
+
+
+
         tasks = []
         for sample in sample_list:
-            BAM = os.path.join(output_dir, sample + '_sorted.bam')
+            BAM = os.path.join(work_dir=self.work_dir,runName=self.runName ,sample+ '_sorted.bam')
             tasks.append(CallVariantTask(sample = sample, BAM = BAM))
             tasks.append(IndexBamTask(sample=sample, BAM=BAM))
             tasks.append(SortBamTask(sample=sample, BAM=BAM))

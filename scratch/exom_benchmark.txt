@@ -56,8 +56,21 @@ sudo java -Xmx2g -jar /home/lee/NGS/GenomeAnalysisTK.jar \
 	-o /media/NGS_data/BaseSpace_exome/HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878/pipeline_output/NA12878_A007_S5_sorted.vcf
 	
 	
-python /media/NGS_data/workspace/py/pipeline.py -w /media/NGS_data/BaseSpace_exome/ -r HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878 -s NA12878_A007_S5
+python /media/NGS_data/workspace/py/pipeline2.py -w /media/NGS_data/scratch/ -r HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878 -s NA12878_A014_S8 --trimming
+
 
 java -Xmx2g -jar /home/lee/NGS/picard.jar CollectAlignmentSummaryMetrics R=/media/fs02/reference/hg19/hg19.fasta I=NA12878_A002_S1_sorted.bam O=NA12878_A002_S1_alignment_metrics.txt
+
+python /media/NGS_data/workspace/py/pipeline_luigi.py -w /media/NGS_data/scratch/ -r HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878 --sampleId NA12878_A014_S8
+
+
+## test new trimmer 9/27/2017
+parallel --verbose --eta --progress --bar python /media/NGS_data/workspace/py/pipeline2.py -w /media/NGS_data/scratch/ -r HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878 -s ::: NA12878_A005_S3 NA12878_A014_S8
+
+
+java -jar /home/lee/NGS/Trimmomatic-0.36/trimmomatic-0.36.jar PE /media/NGS_data/scratch/HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878/NA12878_A014_S8/NA12878_A014_S8_R1_001.fastq.gz /media/NGS_data/scratch/HiSeq_2500_v2_TruSeq_Exome_9_replicates_of_NA12878/NA12878_A014_S8/NA12878_A014_S8_R2_001.fastq.gz lane1.paired.1.fastq.gz lane1.unpaired.1.fastq.gz lane1.paired.2.fastq.gz lane1.unpaired.2.fastq.gz ILLUMINACLIP:/home/lee/NGS/Trimmomatic-0.36/adapters/TruSeq3-PE.fa:2:30:10
+
+
+
 
 
